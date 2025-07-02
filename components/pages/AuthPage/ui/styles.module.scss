@@ -1,0 +1,19 @@
+$bg: "/images/matchbox.png";
+
+.AuthPage {
+  min-height: 100vh;
+  position: relative;
+
+  background-image: radial-gradient(
+      circle 300px at 75% 120%,
+      #deb88f 0%,
+      #f16001 40%,
+      #c10801 70%,
+      rgba(#000000, 0) 100%
+    ),
+    url(#{$bg}), url(#{$bg});
+
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-size: 600px, 280px, 280px;
+  background-position: 90% 95%, calc(0% - 150px) 65%, calc(100% + 150px) 65%;
+}
