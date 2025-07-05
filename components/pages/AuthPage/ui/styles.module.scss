@@ -5,7 +5,7 @@ $bg: "/images/matchbox.png";
   position: relative;
 
   background-image: radial-gradient(
-      circle 300px at 75% 120%,
+      circle 25vh at 90% 100%,
       #deb88f 0%,
       #f16001 40%,
       #c10801 70%,
@@ -15,5 +15,5 @@ $bg: "/images/matchbox.png";
 
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-size: 600px, 280px, 280px;
-  background-position: 90% 95%, calc(0% - 150px) 65%, calc(100% + 150px) 65%;
+  background-position: 100% 95%, calc(0% - 150px) 65%, calc(100% + 150px) 65%;
 }

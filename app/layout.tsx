@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { jost, libreFranklin } from "./ui/fonts";
+import { jost, libreFranklin, comfortaa } from "./ui/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${jost.variable} ${libreFranklin.variable}`}>
+      <body
+        className={`${jost.variable} ${comfortaa.variable} ${libreFranklin.variable}`}
+      >
         {children}
       </body>
     </html>

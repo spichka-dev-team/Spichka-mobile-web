@@ -17,7 +17,7 @@ export const AuthPage: React.FC<Props> = ({ className }) => {
         "flex flex-col items-center justify-between pt-10 pb-6 px-2"
       )}
     >
-      <div>
+      <div className="z-30">
         <h1 className="font-jost font-extrabold uppercase text-5xl leading-none text-center">
           Спичка собирает город
         </h1>
@@ -27,7 +27,7 @@ export const AuthPage: React.FC<Props> = ({ className }) => {
         </h4>
       </div>
 
-      <div className="relative flex flex-col gap-3 h-fit w-full">
+      <div className="relative flex flex-col gap-3 h-fit w-full max-w-xs">
         <Button
           className="absolute bg-white rounded-full text-black font-jost text-2xl px-8 py-5 left-0 bottom-12"
           size={"sm"}

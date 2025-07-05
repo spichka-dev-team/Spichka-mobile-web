@@ -13,6 +13,7 @@ const config = {
       fontFamily: {
         jost: ["var(--font-jost)", "sans-serif"],
         libreFranklin: ["var(--font-libre-franklin)", "sans-serif"],
+        comfortaa: ["var(--font-comfortaa)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",
