@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { jost, libreFranklin, comfortaa } from "./ui/fonts";
+import {
+  jost,
+  libreFranklin,
+  comfortaa,
+  unbounded,
+  geologica,
+} from "./ui/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${jost.variable} ${comfortaa.variable} ${libreFranklin.variable}`}
+        className={`${jost.variable} ${comfortaa.variable} ${libreFranklin.variable} ${unbounded.variable} ${geologica.variable}`}
       >
         {children}
       </body>

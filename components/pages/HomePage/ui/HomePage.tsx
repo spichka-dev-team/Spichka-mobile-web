@@ -17,7 +17,7 @@ export const HomePage: React.FC<Props> = ({ className }) => {
       className={cn(
         className,
         styles.AuthPage,
-        "flex flex-col gap-4 pt-10 pb-6 px-2"
+        "flex flex-col gap-4 pt-10 pb-24 px-2"
       )}
     >
       <div className="flex px-4 justify-between">

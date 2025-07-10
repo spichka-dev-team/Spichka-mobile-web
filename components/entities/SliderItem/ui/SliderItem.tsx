@@ -1,19 +1,11 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
+import { EventType } from "@/components/shared/types/models";
 
-export interface EventCard {
-  id?: number;
-  title: string;
-  description?: string;
-  eventDate: string;
-  price?: number;
-  rating?: string;
-  preview: string;
-  location_id?: number;
-}
-
-export const SliderItem: React.FC<EventCard> = ({
+export const SliderItem: React.FC<EventType> = ({
+  id,
   title,
   preview,
   eventDate,
@@ -29,15 +21,17 @@ export const SliderItem: React.FC<EventCard> = ({
         "w-48 h-60 rounded-2xl bg-white relative shadow-md overflow-hidden"
       )}
     >
-      <div className="w-full h-full relative">
-        <Image src={preview} alt={title} fill className="object-cover" />
-      </div>
-      <div className="absolute top-1 left-1 bg-black/25 rounded-2xl backdrop-blur-sm px-3 py-2 flex items-end">
-        <h3 className="text-sm font-semibold text-white">{formattedDate}</h3>
-      </div>
-      <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-2 flex items-end">
-        <h3 className="text-sm font-semibold text-white">{title}</h3>
-      </div>
+      <Link className="w-full h-full" href={`/event/${id}`}>
+        <div className="w-full h-full relative">
+          <Image src={preview} alt={title} fill className="object-cover" />
+        </div>
+        <div className="absolute top-1 left-1 bg-black/25 rounded-2xl backdrop-blur-sm px-3 py-2 flex items-end">
+          <h3 className="text-sm font-semibold text-white">{formattedDate}</h3>
+        </div>
+        <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-2 flex items-end">
+          <h3 className="text-sm font-semibold text-white">{title}</h3>
+        </div>
+      </Link>
     </div>
   );
 };

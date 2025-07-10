@@ -1,0 +1,17 @@
+.TabBar {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.1) 100%,
+    transparent 100%
+  );
+
+  @media (max-width: 767px) {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 10%,
+      rgba(0, 0, 0, 0.2) 80%,
+      transparent 100%
+    );
+  }
+}

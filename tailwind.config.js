@@ -14,6 +14,8 @@ const config = {
         jost: ["var(--font-jost)", "sans-serif"],
         libreFranklin: ["var(--font-libre-franklin)", "sans-serif"],
         comfortaa: ["var(--font-comfortaa)", "sans-serif"],
+        unbounded: ["var(--font-unbounded)", "sans-serif"],
+        geologica: ["var(--font-geologica)", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

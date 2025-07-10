@@ -1,0 +1,15 @@
+.EventPage {
+  min-height: 100vh;
+  position: relative;
+
+  background-image: radial-gradient(
+    ellipse 110vw 45% at 0% 50%,
+    #deb88f 0%,
+    #f16001 40%,
+    #c10801 70%,
+    rgba(#000000, 0) 100%
+  );
+
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 100% 95%;
+}
