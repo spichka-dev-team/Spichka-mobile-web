@@ -4,7 +4,7 @@ import { EventPage } from "@/components/pages/EventPage";
 import { notFound } from "next/navigation";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const EventPageServer = async ({ params }: Props) => {
