@@ -28,12 +28,12 @@ export const HomePage: React.FC<Props> = ({ className }) => {
       <BannerSlider />
 
       <section className="flex flex-col gap-4">
-        <h3 className="font-comfortaa font-medium text-xl">название раздела</h3>
+        <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
         <EventSlider />
       </section>
 
       <section className="flex flex-col gap-4">
-        <h3 className="font-comfortaa font-medium text-xl">название раздела</h3>
+        <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
         <EventSlider />
       </section>
     </main>

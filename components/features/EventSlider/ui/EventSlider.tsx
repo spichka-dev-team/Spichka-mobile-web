@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -8,7 +8,6 @@ import { Autoplay } from "swiper/modules";
 import { SliderItem, SliderPhotoItem } from "@/components/entities";
 
 import "swiper/css";
-// import styles from "./styles.module.scss";
 import { ExtendedSliderItem } from "@/components/shared/types/models";
 
 interface Props {
@@ -20,27 +19,44 @@ export const EventSliderClient: React.FC<Props> = ({
   initialData,
   className,
 }) => {
+  const [slidesPerView, setSlidesPerView] = useState<number>(1);
+
+  const calculateSlides = (width: number) => {
+    const containerPadding = 8 * 2;
+    const spaceBetween = 8;
+    const slideWidth = 176;
+
+    const available = width - containerPadding;
+    const count = (available + spaceBetween) / (slideWidth + spaceBetween);
+    return Math.max(1, count);
+  };
+
+  useEffect(() => {
+    const onResize = () => {
+      setSlidesPerView(calculateSlides(window.innerWidth));
+    };
+
+    onResize();
+
+    // дебаунс
+    let tid: NodeJS.Timeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(tid);
+      tid = setTimeout(onResize, 100);
+    });
+    return () => {
+      clearTimeout(tid);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
   return (
     <div className={cn("overflow-auto w-full h-fit", className)}>
       <Swiper
         modules={[Autoplay]}
-        spaceBetween={16}
-        breakpoints={{
-          0: {
-            slidesPerView: 1.5, // немного видно второй слайд сбоку
-          },
-          370: {
-            slidesPerView: 1.8,
-          },
-          425: {
-            slidesPerView: 2,
-          },
-        }}
-        loop
-        autoplay={{
-          delay: 3000,
-          disableOnInteraction: true,
-        }}
+        spaceBetween={8}
+        slidesPerView={slidesPerView}
+        autoplay={{ delay: 3000, disableOnInteraction: true }}
       >
         {initialData.map((item) => (
           <SwiperSlide key={item.id}>
@@ -50,6 +66,14 @@ export const EventSliderClient: React.FC<Props> = ({
                 title={item.title}
                 preview={item.preview}
                 eventDate={item.eventDate}
+                location_id={0}
+                createdAt={""}
+                updatedAt={null}
+                deletedAt={null}
+                location={undefined}
+                eventImages={[]}
+                hotTags={[]}
+                chipsTags={[]}
               />
             ) : (
               <SliderPhotoItem url={item.url} />

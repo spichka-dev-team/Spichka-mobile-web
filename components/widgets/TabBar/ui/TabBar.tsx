@@ -14,17 +14,17 @@ const tabItems = [
   },
   {
     icon: Search,
-    href: "/homepage/search",
+    href: "/search",
     label: "Поиск",
   },
   {
     icon: Compass,
-    href: "/homepage/explore",
+    href: "/explore",
     label: "Обзор",
   },
   {
     icon: User,
-    href: "/homepage/profile",
+    href: "/profile",
     label: "Профиль",
   },
 ];

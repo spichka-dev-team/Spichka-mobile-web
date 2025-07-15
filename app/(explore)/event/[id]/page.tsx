@@ -9,13 +9,18 @@ interface Props {
 
 const EventPageServer = async ({ params }: Props) => {
   const { id } = await params;
-  const response = await axios.get(
-    `http://176.123.178.135:2516/api/events/${id}`
-  );
+  try {
+    const response = await axios.get(
+      `https://vencera.tech/spichka/api/events/${id}`
+    );
+    return <EventPage data={response.data} />;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return notFound();
+    }
 
-  if (!response) return notFound();
-
-  return <EventPage data={response.data} />;
+    throw error;
+  }
 };
 
 export default EventPageServer;

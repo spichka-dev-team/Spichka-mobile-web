@@ -18,7 +18,7 @@ export const SliderItem: React.FC<EventType> = ({
   return (
     <div
       className={cn(
-        "w-48 h-60 rounded-2xl bg-white relative shadow-md overflow-hidden"
+        "w-44 h-72 rounded-2xl bg-white relative shadow-md overflow-hidden"
       )}
     >
       <Link className="w-full h-full" href={`/event/${id}`}>

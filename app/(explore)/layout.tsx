@@ -1,8 +1,9 @@
-import type React from "react";
-import { TabBar } from "@/components/widgets/";
+// app/platform/layout.tsx
+import React from "react";
+import { PlatformHeader } from "@/components/widgets";
 
 export const metadata = {
-  title: "Spichka - главная",
+  title: "Платформа мероприятий",
   description: "Просмотр событий, организаторов и исполнителей",
 };
 
@@ -13,10 +14,10 @@ export default function PlatformLayout({
 }) {
   return (
     <>
-      {children}
+      <PlatformHeader />
 
-      {/* Tab Bar */}
-      <TabBar />
+      {/* Контент */}
+      {children}
     </>
   );
 }
