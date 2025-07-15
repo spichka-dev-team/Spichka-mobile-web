@@ -33,7 +33,7 @@ export const AuthPage: React.FC<Props> = ({ className }) => {
           size={"sm"}
           asChild
         >
-          <Link href={"/homepage"}>Авторизоваться</Link>
+          <Link href={"/login"}>Авторизоваться</Link>
         </Button>
 
         <Button
