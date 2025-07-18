@@ -3,6 +3,8 @@
 import { SignUpFormSchema } from "@/lib/definitions";
 import axios from "axios";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export type LoginState = {
   errors?: {
     email?: string[];
@@ -52,14 +54,11 @@ export async function signup(
   // 2. Create user
 
   try {
-    const response = await axios.post(
-      "https://vencera.tech/spichka/api/auth/register",
-      {
-        username,
-        email,
-        password,
-      }
-    );
+    const response = await axios.post(`${apiUrl}/users/register`, {
+      username,
+      email,
+      password,
+    });
 
     const { access_token } = response.data;
 

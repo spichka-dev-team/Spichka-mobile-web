@@ -1,4 +1,3 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -6,7 +5,7 @@ export function middleware(req: NextRequest) {
   const token = req.cookies.get("spichka_token");
   const { pathname } = req.nextUrl;
 
-  // если путь /profile и нет токена → редирект на /login
+  // если путь /profile и нет токена то редирект на /login
   if (pathname === "/profile" && !token) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/login";

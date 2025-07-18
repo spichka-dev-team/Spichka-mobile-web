@@ -12,17 +12,14 @@ export function SignUpForm() {
   const [state, action, pending] = useActionState(signup, {} as SignUpState);
   const router = useRouter();
 
-  // Шаг формы: false - ввод email и паролей, true - ввод username
   const [step, setStep] = useState(false);
 
-  // Поля формы
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Валидация по шагам
   const stepOneValid =
     email.trim() !== "" && password.length >= 9 && password === confirmPassword;
   const stepTwoValid = username.trim() !== "";
@@ -42,6 +39,7 @@ export function SignUpForm() {
     setTokenAndRedirect();
   }, [router, state]);
 
+  // доработать логику для продолжения регистрации
   const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
     if (!step) {
@@ -123,7 +121,7 @@ export function SignUpForm() {
         </>
       )}
 
-      {/* Шаг 2: Username */}
+      {/* второй шаг Username */}
       {step && (
         <div>
           <input
