@@ -2,6 +2,7 @@
 
 import type { LocationType } from "@/components/shared/types/models";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import type { LatLngLiteral } from "leaflet";
 import { Button } from "@/components/shared/ui";
 
@@ -52,7 +53,7 @@ export const LocationSection = ({ location }: { location?: LocationType }) => {
           </div>
 
           <Button className="bg-white text-black py-6 px-6 rounded-full font-geologica font-medium text-sm">
-            узнать больше
+            <Link href={`/location/${location.id}`}>узнать больше</Link>
           </Button>
         </div>
 

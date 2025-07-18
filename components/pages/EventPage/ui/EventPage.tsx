@@ -2,8 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { EventType } from "@/components/shared/types/models";
 import { Button, ExpandableText } from "@/components/shared/ui";
-import { EventSliderClient } from "@/components/features/EventSlider/ui/EventSlider";
-import { EventSlider } from "@/components/features/EventSlider";
+import { EventSlider, PhotoSliderClient } from "@/components/features";
 import { ChipTag } from "@/components/entities/ChipTag";
 import { ProgramSection, LocationSection } from "@/components/widgets";
 import Image from "next/image";
@@ -81,7 +80,7 @@ export const EventPage: React.FC<Props> = ({ data }) => {
         <span className="font-geologica font-bold text-lg">{data.price}₸</span>
       </div>
 
-      <EventSliderClient initialData={data.eventImages} />
+      <PhotoSliderClient initialData={data.eventImages} />
 
       <section className="w-full">
         <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">

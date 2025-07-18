@@ -2,9 +2,9 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { EventType } from "@/components/shared/types/models";
+import { EventCardType } from "@/components/shared/types/models";
 
-export const SliderItem: React.FC<EventType> = ({
+export const SliderItem: React.FC<EventCardType> = ({
   id,
   title,
   preview,

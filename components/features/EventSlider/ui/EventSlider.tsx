@@ -5,13 +5,13 @@ import { cn } from "@/lib/utils";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { SliderItem, SliderPhotoItem } from "@/components/entities";
+import { SliderItem } from "@/components/entities";
 
 import "swiper/css";
-import { ExtendedSliderItem } from "@/components/shared/types/models";
+import { EventCardType } from "@/components/shared/types/models";
 
 interface Props {
-  initialData: ExtendedSliderItem[];
+  initialData: EventCardType[];
   className?: string;
 }
 
@@ -60,24 +60,14 @@ export const EventSliderClient: React.FC<Props> = ({
       >
         {initialData.map((item) => (
           <SwiperSlide key={item.id}>
-            {"eventDate" in item ? (
+            {
               <SliderItem
                 id={item.id}
                 title={item.title}
                 preview={item.preview}
                 eventDate={item.eventDate}
-                location_id={0}
-                createdAt={""}
-                updatedAt={null}
-                deletedAt={null}
-                location={undefined}
-                eventImages={[]}
-                hotTags={[]}
-                chipsTags={[]}
               />
-            ) : (
-              <SliderPhotoItem url={item.url} />
-            )}
+            }
           </SwiperSlide>
         ))}
       </Swiper>

@@ -23,6 +23,7 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        "white-glass": "rgba(255, 255, 255, 0.15)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

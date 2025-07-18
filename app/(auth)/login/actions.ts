@@ -3,6 +3,8 @@
 import { SignInFormSchema } from "@/lib/definitions";
 import axios from "axios";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export type LoginState = {
   errors?: {
     email?: string[];
@@ -20,7 +22,6 @@ export async function login(
   state: LoginState | undefined,
   formData: FormData
 ): Promise<LoginState> {
-  // 1. Validate
   const result = SignInFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -31,13 +32,19 @@ export async function login(
   const { email, password } = result.data;
 
   try {
-    // 2. Запрос на API
-    const { data } = await axios.post(
-      "https://vencera.tech/spichka/api/auth/login",
-      { email, password }
-    );
+    const exist = await axios.request({
+      url: `${apiUrl}/users/exist-by-email`,
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      data: { email },
+    });
+    console.log(exist.data);
 
-    // 3. Пишем cookie + редирект
+    const { data } = await axios.post(`${apiUrl}/users/login`, {
+      email,
+      password,
+    });
+
     return {
       redirectTo: "/profile",
       cookie: {
@@ -48,7 +55,7 @@ export async function login(
   } catch (err: unknown) {
     if (axios.isAxiosError(err) && err.response) {
       const status = err.response.status;
-      if (status === 401) {
+      if (status === 500) {
         return { errors: { password: ["Неверный email или пароль"] } };
       }
       if (status === 400) {

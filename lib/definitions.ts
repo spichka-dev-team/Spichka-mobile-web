@@ -1,8 +1,6 @@
 import { z } from "zod";
 
 export const SignUpFormSchema = z.object({
-  first_name: z.string().min(1, "Введите имя"),
-  last_name: z.string().min(1, "Введите фамилию"),
   username: z.string().min(3, "Имя пользователя слишком короткое"),
   email: z.string().email("Неверный email"),
   password: z.string().min(6, "Пароль минимум 6 символов"),

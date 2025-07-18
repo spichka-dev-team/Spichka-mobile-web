@@ -1,9 +1,10 @@
 import type React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import smartGuy from "@/public/images/smartguy.jpg";
 
 interface AvatarProps {
-  photo: string;
+  photo?: string;
   title: string;
   subtitle: string;
   size?: "sm" | "md" | "lg" | "xl";
@@ -53,7 +54,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         )}
       >
         <Image
-          src={photo || "/placeholder.svg"}
+          src={photo || smartGuy}
           alt={title}
           fill
           className="object-cover"

@@ -1,0 +1,9 @@
+.input::placeholder {
+  font-family: "Geologica", sans-serif;
+  font-weight: 500;
+  font-style: normal; /* 'Medium' в CSS — это font-weight, а не font-style */
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.3);
+}

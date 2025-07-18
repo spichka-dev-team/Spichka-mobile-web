@@ -1,3 +1,10 @@
+export type EventCardType = {
+  id: number;
+  title: string;
+  eventDate: string;
+  preview: string;
+};
+
 export interface EventType {
   id?: number;
   title: string;

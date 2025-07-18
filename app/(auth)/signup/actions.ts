@@ -17,8 +17,6 @@ export type LoginState = {
 };
 
 type SignUpErrors = {
-  first_name?: string[];
-  last_name?: string[];
   username?: string[];
   email?: string[];
   password?: string[];
@@ -38,10 +36,7 @@ export async function signup(
   state: SignUpState | undefined,
   formData: FormData
 ): Promise<SignUpState> {
-  // 1. Validate fields
   const validationResult = SignUpFormSchema.safeParse({
-    first_name: formData.get("first_name"),
-    last_name: formData.get("last_name"),
     username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
@@ -52,25 +47,20 @@ export async function signup(
     };
   }
 
-  const { first_name, last_name, username, email, password } =
-    validationResult.data;
+  const { username, email, password } = validationResult.data;
 
   // 2. Create user
 
   try {
-    // 2. Отправка данных на внешний API
     const response = await axios.post(
       "https://vencera.tech/spichka/api/auth/register",
       {
-        first_name,
-        last_name,
         username,
         email,
         password,
       }
     );
 
-    // 3. Обработка успешного ответа
     const { access_token } = response.data;
 
     return {
@@ -81,7 +71,6 @@ export async function signup(
       },
     };
   } catch (error: unknown) {
-    // 4. Обработка ошибок
     if (axios.isAxiosError(error)) {
       if (error.response?.status === 409) {
         return {

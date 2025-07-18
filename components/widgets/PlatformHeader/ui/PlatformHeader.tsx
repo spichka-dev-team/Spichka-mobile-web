@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Plus, Share } from "lucide-react";
+import { Plus, Share, ChevronLeft } from "lucide-react";
 
 export const PlatformHeader = () => {
   const router = useRouter();
@@ -16,20 +16,20 @@ export const PlatformHeader = () => {
         {/* Кнопка назад */}
         <button
           onClick={handleBackClick}
-          className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors"
+          className="p-4 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ChevronLeft className="w-5 h-5" />
         </button>
 
         {/* Правые кнопки */}
         <div className="flex gap-3">
           {/* Кнопка добавить */}
-          <button className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
+          <button className="p-4 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
             <Plus className="w-5 h-5" />
           </button>
 
           {/* Кнопка поделиться */}
-          <button className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
+          <button className="p-4 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
             <Share className="w-5 h-5" />
           </button>
         </div>
