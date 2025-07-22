@@ -1,12 +1,25 @@
+"use server";
+
+import axios from "axios";
 import { Clock } from "lucide-react";
 
-export const ProgramSection = () => {
-  const scheduleItems = [
-    { time: "18:00", activity: "open mic" },
-    { time: "18:30", activity: "лекция" },
-    { time: "19:20", activity: "показ фильма" },
-    { time: "20:30", activity: "обсуждение" },
-  ];
+interface Props {
+  id: number | undefined;
+}
+
+type ScheduleItem = {
+  ID: number;
+  Name: string;
+  SortOrder: number;
+  Time: string;
+  EventId: number;
+};
+
+const apiUrl = process.env.API_URL;
+
+export const ProgramSection: React.FC<Props> = async ({ id }) => {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
+  const { data: schedule } = await axios.get(`${apiUrl}/events/${id}/schedule`);
 
   return (
     <div className="w-full bg-white/20 backdrop-blur-sm p-4 rounded-lg">
@@ -23,16 +36,16 @@ export const ProgramSection = () => {
 
         {/* Right side - Schedule */}
         <div className="space-y-4">
-          {scheduleItems.map((item, index) => (
+          {schedule.map((item: ScheduleItem) => (
             <div
-              key={index}
+              key={item.ID}
               className="flex items-center font-geologica text-white"
             >
               <div className="w-2 h-2 bg-white rounded-full mr-4 flex-shrink-0"></div>
               <span className="flex flex-wrap text-sm">
-                <span className="">{item.time}</span>
+                <span className="">{item.Time}</span>
                 <span className="mx-2">-</span>
-                <span>{item.activity}</span>
+                <span>{item.Name}</span>
               </span>
             </div>
           ))}

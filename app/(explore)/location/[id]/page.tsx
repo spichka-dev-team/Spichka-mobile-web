@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { EventPage } from "@/components/pages/EventPage";
+import { LocationPage } from "@/components/pages/LocationPage";
 import { notFound } from "next/navigation";
 
 interface Props {
@@ -9,11 +9,12 @@ interface Props {
 
 const apiUrl = process.env.API_URL;
 
-const EventPageServer = async ({ params }: Props) => {
+const LocationPageServer = async ({ params }: Props) => {
   const { id } = await params;
+
   try {
-    const response = await axios.get(`${apiUrl}/events/${id}`);
-    return <EventPage data={response.data} />;
+    const { data: initialData } = await axios.get(`${apiUrl}/locations/${id}`);
+    return <LocationPage id={id} initialData={initialData} />;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {
       return notFound();
@@ -22,5 +23,4 @@ const EventPageServer = async ({ params }: Props) => {
     throw error;
   }
 };
-
-export default EventPageServer;
+export default LocationPageServer;

@@ -10,7 +10,7 @@ import "swiper/css";
 
 interface PhotoSliderItem {
   id: number;
-  url: string;
+  imageUrl: string;
 }
 
 interface Props {
@@ -64,6 +64,12 @@ export const PhotoSliderClient: React.FC<Props> = ({
     setIsFullscreenOpen(false);
   };
 
+  if (!initialData || initialData.length === 0) {
+    return (
+      <div className={cn("text-center", className)}>No photos available</div>
+    );
+  }
+
   return (
     <>
       <div className={cn("overflow-auto w-full h-fit", className)}>
@@ -79,7 +85,7 @@ export const PhotoSliderClient: React.FC<Props> = ({
                 onClick={() => handlePhotoClick(index)}
                 className="cursor-pointer"
               >
-                <SliderPhotoItem url={item.url} />
+                <SliderPhotoItem url={item.imageUrl} />
               </div>
             </SwiperSlide>
           ))}

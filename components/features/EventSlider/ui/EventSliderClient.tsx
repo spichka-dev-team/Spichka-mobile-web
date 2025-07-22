@@ -20,6 +20,7 @@ export const EventSliderClient: React.FC<Props> = ({
   className,
 }) => {
   const [slidesPerView, setSlidesPerView] = useState<number>(1);
+  console.log(initialData);
 
   const calculateSlides = (width: number) => {
     const containerPadding = 8 * 2;
@@ -64,8 +65,8 @@ export const EventSliderClient: React.FC<Props> = ({
               <SliderItem
                 id={item.id}
                 title={item.title}
-                preview={item.preview}
-                eventDate={item.eventDate}
+                photo_url={item.photo_url}
+                startDate={item.startDate}
               />
             }
           </SwiperSlide>

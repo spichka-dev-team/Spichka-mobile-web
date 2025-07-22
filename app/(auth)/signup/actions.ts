@@ -43,6 +43,8 @@ export async function signup(
     email: formData.get("email"),
     password: formData.get("password"),
   });
+  console.log("Validation Result:", validationResult);
+
   if (!validationResult.success) {
     return {
       errors: validationResult.error.flatten().fieldErrors,
@@ -71,10 +73,11 @@ export async function signup(
     };
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
-      if (error.response?.status === 409) {
+      console.error("Axios Error:", error.response?.data);
+      if (error.response?.data.error === "ERROR-REGISTERED-USER") {
         return {
           errors: {
-            email: ["Пользователь с таким email или username уже существует"],
+            general: ["Пользователь с таким email или username уже существует"],
           },
         };
       }

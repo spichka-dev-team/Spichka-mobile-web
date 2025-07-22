@@ -11,7 +11,7 @@ import type { Swiper as SwiperType } from "swiper";
 
 interface PhotoSliderItem {
   id: number;
-  url: string;
+  imageUrl: string;
 }
 
 interface Props {
@@ -142,7 +142,7 @@ export const FullscreenPhotoViewer: React.FC<Props> = ({
             >
               <div className="relative w-full h-full flex items-center justify-center p-4">
                 <Image
-                  src={photo.url || "/placeholder.svg"}
+                  src={photo.imageUrl || "/placeholder.svg"}
                   alt={`Photo ${photo.id}`}
                   fill
                   className="object-contain"

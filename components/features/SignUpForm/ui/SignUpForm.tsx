@@ -4,15 +4,20 @@ import { signup, SignUpState } from "@/app/(auth)/signup/actions";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
+import { startTransition } from "react";
 import Link from "next/link";
 
 import styles from "./styles.module.scss";
 
-export function SignUpForm() {
+export function SignUpForm({
+  step,
+  setStep,
+}: {
+  step: boolean;
+  setStep: (value: boolean) => void;
+}) {
   const [state, action, pending] = useActionState(signup, {} as SignUpState);
   const router = useRouter();
-
-  const [step, setStep] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +54,10 @@ export function SignUpForm() {
       formData.append("email", email);
       formData.append("username", username);
       formData.append("password", password);
-      action(formData);
+
+      startTransition(() => {
+        action(formData);
+      });
     }
   };
 
@@ -138,6 +146,14 @@ export function SignUpForm() {
           {state?.errors?.username && (
             <p className="mt-1 text-sm text-red-500">{state.errors.username}</p>
           )}
+
+          <button
+            type="button"
+            onClick={() => setStep(false)}
+            className="text-sm text-white underline mt-2 hover:text-white/80 transition"
+          >
+            ← Вернуться назад
+          </button>
         </div>
       )}
 

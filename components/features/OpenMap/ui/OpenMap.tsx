@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import { LatLngLiteral, Icon } from "leaflet";
 import { MapPin } from "lucide-react";
@@ -28,16 +27,6 @@ const createLucideIcon = () =>
   });
 
 export const OpenMap: React.FC<MapProps> = ({ center }) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return <div className="w-full h-full bg-gray-100 animate-pulse" />;
-  }
-
   return (
     <div className="w-full h-full rounded-lg border border-[#868686] overflow-hidden">
       <MapContainer

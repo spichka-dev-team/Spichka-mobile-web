@@ -1,10 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 
 import { SignUpForm } from "@/components/features";
 
+const texts = [
+  {
+    title: "создайте аккаунт",
+    subtitle: "зарегистрируйтесь, чтобы получить доступ ко всем функциям",
+  },
+  {
+    title: "придумайте имя",
+    subtitle:
+      "придумайте уникальный ник, который будет отображаться в вашем профиле",
+  },
+];
+
 export const SignUpPage: React.FC = () => {
+  const [step, setStep] = useState(false);
+
   return (
     <main
       className={cn(
@@ -14,14 +30,14 @@ export const SignUpPage: React.FC = () => {
     >
       <div className="text-center space-y-4">
         <h2 className="font-unbounded font-bold text-2xl lowercase">
-          создайте аккаунт
+          {step ? texts[1].title : texts[0].title}
         </h2>
         <h4 className="font-unbounded font-medium text-base lowercase">
-          зарегистрируйтесь, чтобы получить доступ ко всем функциям
+          {step ? texts[1].subtitle : texts[0].subtitle}
         </h4>
       </div>
 
-      <SignUpForm />
+      <SignUpForm step={step} setStep={setStep} />
     </main>
   );
 };

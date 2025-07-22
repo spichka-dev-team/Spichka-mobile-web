@@ -1,22 +1,35 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { EventType } from "@/components/shared/types/models";
+import axios from "axios";
+import { EventType, TagType } from "@/components/shared/types/models";
 import { Button, ExpandableText } from "@/components/shared/ui";
-import { EventSlider, PhotoSliderClient } from "@/components/features";
+import { EventSlider, PhotoSlider } from "@/components/features";
 import { ChipTag } from "@/components/entities/ChipTag";
-import { ProgramSection, LocationSection } from "@/components/widgets";
+import { ProgramSection, LocationSectionServer } from "@/components/widgets";
 import Image from "next/image";
+import { Suspense } from "react";
 
 import styles from "./styles.module.scss";
+
+const apiUrl = process.env.API_URL;
 
 interface Props {
   data: EventType;
 }
 
-const tags = ["Кинопоказ", "лекция", "обсуждение"];
+export const EventPage: React.FC<Props> = async ({ data }) => {
+  // const { data: sameEvents } = await axios.get(
+  //   `${apiUrl}/events/${data.id}/same-events`
+  // );
+  const { data: tags } = await axios.get(`${apiUrl}/events/${data.id}/tags`);
+  // const { data: location } = await axios.get(
+  //   `${apiUrl}/events/${data.id}/locations`
+  // );
 
-export const EventPage: React.FC<Props> = ({ data }) => {
-  const formattedDate = new Date(data.eventDate).toLocaleDateString("ru-RU", {
+  const chipsTags = tags.filter((tag: TagType) => tag.type === "chips");
+  const hotTags = tags.filter((tag: TagType) => tag.type === "hot");
+
+  const formattedDate = new Date(data.startDate).toLocaleDateString("ru-RU", {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -33,7 +46,10 @@ export const EventPage: React.FC<Props> = ({ data }) => {
     >
       <div className="p-[5px] rounded-2xl bg-white/20 backdrop-blur-sm">
         <Image
-          src={data.preview}
+          src={
+            data.preview ||
+            "https://cdn1.ozone.ru/s3/multimedia-q/6254451122.jpg"
+          }
           width={300}
           height={375}
           alt={`Event_With_Id_${data.id}_Preview`}
@@ -47,9 +63,9 @@ export const EventPage: React.FC<Props> = ({ data }) => {
         </h3>
 
         <h4 className="font-geologica font-normal lowercase text-white/80 flex items-center gap-2 flex-wrap">
-          {tags.map((text, idx) => (
-            <React.Fragment key={idx}>
-              <span>{text}</span>
+          {hotTags.map((item: TagType, idx: number) => (
+            <React.Fragment key={item.id}>
+              <span>{item.name}</span>
               {idx < tags.length - 1 && (
                 <div className="w-1 h-1 rounded-full bg-white/80" />
               )}
@@ -61,11 +77,11 @@ export const EventPage: React.FC<Props> = ({ data }) => {
       <div className="flex flex-wrap justify-center gap-2 w-full">
         <ChipTag className="bg-white text-black" title={formattedDate} />
 
-        {data.chipsTags?.map((item, idx) => (
+        {chipsTags?.map((item: TagType) => (
           <ChipTag
             className="bg-white/20 backdrop-blur-sm"
-            key={idx}
-            title={item}
+            key={item.id}
+            title={item.name}
           />
         ))}
       </div>
@@ -80,23 +96,27 @@ export const EventPage: React.FC<Props> = ({ data }) => {
         <span className="font-geologica font-bold text-lg">{data.price}₸</span>
       </div>
 
-      <PhotoSliderClient initialData={data.eventImages} />
+      <PhotoSlider />
 
       <section className="w-full">
         <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">
           программка
         </h3>
-        <ProgramSection />
+        <Suspense fallback={<div>Loading program...</div>}>
+          <ProgramSection id={data.id} />
+        </Suspense>
       </section>
 
       <section className="w-full">
         <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">
           локация
         </h3>
-        <LocationSection location={data.location} />
+        <Suspense fallback={<div>Loading location...</div>}>
+          <LocationSectionServer id={data.id} />
+        </Suspense>
       </section>
 
-      <EventSlider />
+      <EventSlider request={`events/${data.id}/same-events`} />
     </main>
   );
 };

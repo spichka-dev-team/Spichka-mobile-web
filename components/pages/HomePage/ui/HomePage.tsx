@@ -11,7 +11,7 @@ interface Props {
   className?: string;
 }
 
-export const HomePage: React.FC<Props> = ({ className }) => {
+export const HomePage: React.FC<Props> = async ({ className }) => {
   return (
     <main
       className={cn(
@@ -29,12 +29,14 @@ export const HomePage: React.FC<Props> = ({ className }) => {
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
-        <EventSlider />
+
+        <EventSlider request="events/home" />
       </section>
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
-        <EventSlider />
+
+        <EventSlider request="events/home" />
       </section>
     </main>
   );

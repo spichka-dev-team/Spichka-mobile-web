@@ -45,6 +45,8 @@ export async function login(
       password,
     });
 
+    console.log("Login successful:", data.access_token);
+
     return {
       redirectTo: "/profile",
       cookie: {

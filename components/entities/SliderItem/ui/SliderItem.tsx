@@ -7,10 +7,10 @@ import { EventCardType } from "@/components/shared/types/models";
 export const SliderItem: React.FC<EventCardType> = ({
   id,
   title,
-  preview,
-  eventDate,
+  photo_url,
+  startDate,
 }) => {
-  const formattedDate = new Date(eventDate).toLocaleDateString("ru-RU", {
+  const formattedDate = new Date(startDate).toLocaleDateString("ru-RU", {
     day: "2-digit",
     month: "long",
   });
@@ -23,7 +23,15 @@ export const SliderItem: React.FC<EventCardType> = ({
     >
       <Link className="w-full h-full" href={`/event/${id}`}>
         <div className="w-full h-full relative">
-          <Image src={preview} alt={title} fill className="object-cover" />
+          <Image
+            src={
+              photo_url ||
+              "https://cdn1.ozone.ru/s3/multimedia-q/6254451122.jpg"
+            }
+            alt={title}
+            fill
+            className="object-cover"
+          />
         </div>
         <div className="absolute top-1 left-1 bg-black/25 rounded-2xl backdrop-blur-sm px-3 py-2 flex items-end">
           <h3 className="text-sm font-semibold text-white">{formattedDate}</h3>
