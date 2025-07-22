@@ -18,7 +18,6 @@ type ScheduleItem = {
 const apiUrl = process.env.API_URL;
 
 export const ProgramSection: React.FC<Props> = async ({ id }) => {
-  await new Promise((resolve) => setTimeout(resolve, 3000));
   const { data: schedule } = await axios.get(`${apiUrl}/events/${id}/schedule`);
 
   return (
