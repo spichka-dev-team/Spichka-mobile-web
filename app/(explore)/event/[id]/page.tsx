@@ -1,26 +1,13 @@
 import React from "react";
-import axios from "axios";
 import { EventPage } from "@/components/pages/EventPage";
-import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-const apiUrl = process.env.API_URL;
-
 const EventPageServer = async ({ params }: Props) => {
   const { id } = await params;
-  try {
-    const response = await axios.get(`${apiUrl}/events/${id}`);
-    return <EventPage data={response.data} />;
-  } catch (error: unknown) {
-    if (axios.isAxiosError(error) && error.response?.status === 404) {
-      return notFound();
-    }
-
-    throw error;
-  }
+  return <EventPage id={id} />;
 };
 
 export default EventPageServer;

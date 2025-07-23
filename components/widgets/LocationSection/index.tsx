@@ -3,7 +3,7 @@ import { LocationSection } from "./ui/LocationSection";
 import React from "react";
 
 interface Props {
-  id: number | undefined;
+  id: string;
 }
 
 const apiUrl = process.env.API_URL;

@@ -4,7 +4,7 @@ import axios from "axios";
 import { Clock } from "lucide-react";
 
 interface Props {
-  id: number | undefined;
+  id: string;
 }
 
 type ScheduleItem = {
