@@ -29,7 +29,7 @@ export function LoginForm() {
           body: JSON.stringify({ token: state.cookie.value }),
         });
 
-        router.push(state.redirectTo || "/profile");
+        router.push("/profile");
       }
     }
 

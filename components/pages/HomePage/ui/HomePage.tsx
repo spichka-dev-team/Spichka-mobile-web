@@ -11,7 +11,7 @@ interface Props {
   className?: string;
 }
 
-export const HomePage: React.FC<Props> = async ({ className }) => {
+export const HomePage: React.FC<Props> = ({ className }) => {
   return (
     <main
       className={cn(

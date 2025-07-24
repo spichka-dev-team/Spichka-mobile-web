@@ -38,7 +38,7 @@ export function SignUpForm({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: state.cookie.value }),
         });
-        router.push(state.redirectTo || "/profile");
+        router.push("/profile");
       }
     }
     setTokenAndRedirect();

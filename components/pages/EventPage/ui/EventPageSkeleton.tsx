@@ -225,50 +225,6 @@ export const EventPageSkeleton: React.FC = () => {
             }}
           />
         </div>
-
-        <div
-          style={{
-            position: "relative",
-            zIndex: 20,
-            maxWidth: "20rem",
-            width: "100%",
-            height: "fit-content",
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-            backdropFilter: "blur(4px)",
-            borderRadius: "9999px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingRight: "1.25rem",
-          }}
-        >
-          <button
-            style={{
-              backgroundColor: "#ffffff",
-              color: "#000000",
-              height: "100%",
-              padding: "1rem 2rem",
-              borderRadius: "9999px",
-              fontFamily: "Unbounded, sans-serif",
-              fontWeight: "500",
-              fontSize: "1rem",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            купить билет!
-          </button>
-          <span
-            style={{
-              fontFamily: "Geologica, sans-serif",
-              fontWeight: "700",
-              fontSize: "1.125rem",
-              color: "#ffffff",
-            }}
-          >
-            ₸
-          </span>
-        </div>
       </main>
     </>
   );
