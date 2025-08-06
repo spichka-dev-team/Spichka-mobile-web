@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 
@@ -19,8 +19,6 @@ const texts = [
 ];
 
 export const SignUpPage: React.FC = () => {
-  const [step, setStep] = useState(false);
-
   return (
     <main
       className={cn(
@@ -30,14 +28,11 @@ export const SignUpPage: React.FC = () => {
     >
       <div className="text-center space-y-4">
         <h2 className="font-unbounded font-bold text-2xl lowercase">
-          {step ? texts[1].title : texts[0].title}
+          {texts[0].title}
         </h2>
-        <h4 className="font-unbounded font-medium text-base lowercase">
-          {step ? texts[1].subtitle : texts[0].subtitle}
-        </h4>
       </div>
 
-      <SignUpForm step={step} setStep={setStep} />
+      <SignUpForm />
     </main>
   );
 };

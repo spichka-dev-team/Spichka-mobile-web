@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 import { Instagram, Share, ChevronRight, MapPinned } from "lucide-react";
@@ -8,55 +7,19 @@ import Link from "next/link";
 
 import { Avatar, ExpandableText, TitleLink } from "@/components/shared/ui";
 import { ChipTag } from "@/components/entities/ChipTag";
-import { LocationType, TagType } from "@/components/shared/types/models";
+import { LocationType } from "@/components/shared/types/models";
 import { EventSlider } from "@/components/features";
 import { PhotoGalleryTemplate } from "@/components/widgets";
 
 const titles = ["кто они", "история DJ Akee"];
-
-const samplePhotos = [
-  "https://www.thesun.co.uk/wp-content/uploads/2024/03/p-diddy-getting-drinks-nightclub-3104650.jpg",
-  "https://avatars.mds.yandex.net/i?id=7613a25166fd0d273d091bbf51b2a5c0d0003be9-5403234-images-thumbs&n=13",
-  "https://avatars.mds.yandex.net/i?id=dcc2ecf19d6a33ad841c40fcad54f13b_l-8910959-images-thumbs&n=13",
-  "https://i.pinimg.com/originals/bf/fc/ab/bffcabc6850e03bfbcff2caee4463fb2.jpg",
-  "https://avatars.mds.yandex.net/i?id=d120e08b8252d3cb58e751b20dddfc9e_l-12520451-images-thumbs&n=13",
-];
-
-const apiUrl = process.env.API_URL;
 
 interface Props {
   id: string;
   initialData: LocationType;
 }
 
-const mockTags: TagType[] = [
-  { id: 1, name: "Кофейня", type: "chips", created_at: "2024-01-01T00:00:00Z" },
-  { id: 2, name: "Кофе", type: "chips", created_at: "2024-01-01T00:00:00Z" },
-  {
-    id: 3,
-    name: "Кофе с собой",
-    type: "chips",
-    created_at: "2024-01-01T00:00:00Z",
-  },
-  {
-    id: 4,
-    name: "Кофе на вынос",
-    type: "chips",
-    created_at: "2024-01-01T00:00:00Z",
-  },
-  {
-    id: 5,
-    name: "Кофе с собой",
-    type: "chips",
-    created_at: "2024-01-01T00:00:00Z",
-  },
-];
-
 export const LocationPage: React.FC<Props> = async ({ id, initialData }) => {
-  const { data: tags } = await axios.get(`${apiUrl}/locations/${id}/tags`);
-
-  console.log("tags:", tags);
-  // const { data: events } = await axios.get(`${apiUrl}/events/home`);
+  console.log(initialData);
 
   return (
     <main
@@ -83,11 +46,11 @@ export const LocationPage: React.FC<Props> = async ({ id, initialData }) => {
         <ExpandableText text={initialData.description} />
 
         <div className="flex flex-wrap justify-center gap-2 w-full">
-          {mockTags?.map((item: TagType) => (
+          {initialData.tags.map((item, idx) => (
             <ChipTag
               className="bg-white/10 backdrop-blur-sm lowercase"
-              key={item.id}
-              title={item.name}
+              key={item + idx}
+              title={item}
             />
           ))}
         </div>
@@ -122,12 +85,14 @@ export const LocationPage: React.FC<Props> = async ({ id, initialData }) => {
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-normal text-xl">афиша</h3>
-        <EventSlider request={`locations/${id}/events`} />
+        <EventSlider
+          request={`Event_Community_Group?filter={"Community_Group_id":{"_eq":${id}}}&fields=Event_id.*,%20Community_Group_id`}
+        />
       </section>
 
       <section className="flex flex-col gap-2">
         <TitleLink to="gallery" title="Галерея организатора" />
-        <PhotoGalleryTemplate photos={samplePhotos} />
+        <PhotoGalleryTemplate id={id} />
       </section>
     </main>
   );

@@ -20,17 +20,14 @@ const PhotoSliderClient = dynamic(
 
 interface PhotoSliderItem {
   id: number;
-  imageUrl: string;
+  Event_id: number;
+  directus_files_id: string;
 }
 
 interface Props {
   initialData: PhotoSliderItem[];
-  className?: string;
 }
 
-export const PhotoSliderWrapper: React.FC<Props> = ({
-  initialData,
-  className,
-}) => {
-  return <PhotoSliderClient initialData={initialData} className={className} />;
+export const PhotoSliderWrapper: React.FC<Props> = ({ initialData }) => {
+  return <PhotoSliderClient initialData={initialData} />;
 };

@@ -18,6 +18,8 @@ const OpenMap = dynamic(
 );
 
 export const LocationSection = ({ location }: { location?: LocationType }) => {
+  console.log(location);
+
   // Если локации нет — можно вернуть null или заглушку
   if (!location) {
     return (
@@ -27,11 +29,8 @@ export const LocationSection = ({ location }: { location?: LocationType }) => {
     );
   }
 
-  // Собираем center и список меток
-  const center: LatLngLiteral = {
-    lat: location.latitude,
-    lng: location.longitude,
-  };
+  const [lng, lat] = location.map_location.coordinates;
+  const center = { lat, lng };
 
   const markers: Array<LatLngLiteral & { id: string }> = [
     {

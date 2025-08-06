@@ -15,24 +15,15 @@ import { EventSlider } from "@/components/features";
 import { PhotoGalleryTemplate } from "@/components/widgets";
 
 interface Props {
-  className?: string;
+  id: string;
 }
 
 const titles = ["кто они", "история DJ Akee"];
 
-const samplePhotos = [
-  "https://www.thesun.co.uk/wp-content/uploads/2024/03/p-diddy-getting-drinks-nightclub-3104650.jpg",
-  "https://avatars.mds.yandex.net/i?id=7613a25166fd0d273d091bbf51b2a5c0d0003be9-5403234-images-thumbs&n=13",
-  "https://avatars.mds.yandex.net/i?id=dcc2ecf19d6a33ad841c40fcad54f13b_l-8910959-images-thumbs&n=13",
-  "https://i.pinimg.com/originals/bf/fc/ab/bffcabc6850e03bfbcff2caee4463fb2.jpg",
-  "https://avatars.mds.yandex.net/i?id=d120e08b8252d3cb58e751b20dddfc9e_l-12520451-images-thumbs&n=13",
-];
-
-export const OrganiserPage: React.FC<Props> = ({ className }) => {
+export const OrganiserPage: React.FC<Props> = ({ id }) => {
   return (
     <main
       className={cn(
-        className,
         styles.AuthPage,
         "flex flex-col gap-6 pt-[20vh] pb-24 px-2"
       )}
@@ -97,7 +88,7 @@ export const OrganiserPage: React.FC<Props> = ({ className }) => {
 
       <section className="flex flex-col gap-2">
         <TitleLink to="gallery" title="Галерея организатора" />
-        <PhotoGalleryTemplate photos={samplePhotos} />
+        <PhotoGalleryTemplate id={id} />
       </section>
     </main>
   );

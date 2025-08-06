@@ -7,10 +7,10 @@ import { EventCardType } from "@/components/shared/types/models";
 export const SliderItem: React.FC<EventCardType> = ({
   id,
   title,
-  photo_url,
-  startDate,
+  picture,
+  start_date,
 }) => {
-  const formattedDate = new Date(startDate).toLocaleDateString("ru-RU", {
+  const formattedDate = new Date(start_date).toLocaleDateString("ru-RU", {
     day: "2-digit",
     month: "long",
   });
@@ -25,7 +25,7 @@ export const SliderItem: React.FC<EventCardType> = ({
         <div className="w-full h-full relative">
           <Image
             src={
-              photo_url ||
+              `/api/proxy/image?id=${picture}` ||
               "https://cdn1.ozone.ru/s3/multimedia-q/6254451122.jpg"
             }
             alt={title}

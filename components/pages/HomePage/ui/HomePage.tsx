@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 import { EventSlider } from "@/components/features/EventSlider";
-import { BannerSlider } from "@/components/features/BannerSlider";
+// import { BannerSlider } from "@/components/features/BannerSlider";
 import { Ticket } from "@/components/shared/ui/Ticket";
 // import { Button } from "@/components/shared/ui/button";
 // import Link from "next/link";
@@ -25,18 +25,18 @@ export const HomePage: React.FC<Props> = ({ className }) => {
         <Ticket />
       </div>
 
-      <BannerSlider />
+      {/* <BannerSlider /> */}
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
 
-        <EventSlider request="events/home" />
+        <EventSlider request="items/Event" />
       </section>
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
 
-        <EventSlider request="events/home" />
+        <EventSlider request="items/Event" />
       </section>
     </main>
   );

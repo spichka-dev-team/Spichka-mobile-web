@@ -10,18 +10,17 @@ import "swiper/css";
 
 interface PhotoSliderItem {
   id: number;
-  imageUrl: string;
+  Event_id: number;
+  directus_files_id: string;
 }
 
 interface Props {
   initialData: PhotoSliderItem[];
-  className?: string;
 }
 
-export const PhotoSliderClient: React.FC<Props> = ({
-  initialData,
-  className,
-}) => {
+export const PhotoSliderClient: React.FC<Props> = ({ initialData }) => {
+  console.log("PhotoSliderClient: ", initialData);
+
   const [slidesPerView, setSlidesPerView] = useState<number>(1);
   const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -65,14 +64,12 @@ export const PhotoSliderClient: React.FC<Props> = ({
   };
 
   if (!initialData || initialData.length === 0) {
-    return (
-      <div className={cn("text-center", className)}>No photos available</div>
-    );
+    return <div className={cn("text-center")}>No photos available</div>;
   }
 
   return (
     <>
-      <div className={cn("overflow-auto w-full h-fit", className)}>
+      <div className={cn("overflow-auto w-full h-fit")}>
         <Swiper
           modules={[Autoplay]}
           spaceBetween={8}
@@ -85,7 +82,7 @@ export const PhotoSliderClient: React.FC<Props> = ({
                 onClick={() => handlePhotoClick(index)}
                 className="cursor-pointer"
               >
-                <SliderPhotoItem url={item.imageUrl} />
+                <SliderPhotoItem uuid={item.directus_files_id} />
               </div>
             </SwiperSlide>
           ))}

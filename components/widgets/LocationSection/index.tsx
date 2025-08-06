@@ -7,11 +7,19 @@ interface Props {
 }
 
 const apiUrl = process.env.API_URL;
+const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 
 export const LocationSectionServer: React.FC<Props> = async ({ id }) => {
-  const { data: location } = await axios.get(
-    `${apiUrl}/events/${id}/locations`
+  const { data } = await axios.get(
+    `${apiUrl}/items/Community_Group_Location/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+      },
+    }
   );
 
-  return <LocationSection location={location[0]} />;
+  const location = data.data;
+
+  return <LocationSection location={location} />;
 };

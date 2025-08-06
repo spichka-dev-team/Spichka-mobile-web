@@ -65,8 +65,8 @@ export const EventSliderClient: React.FC<Props> = ({
               <SliderItem
                 id={item.id}
                 title={item.title}
-                photo_url={item.photo_url}
-                startDate={item.startDate}
+                picture={item.picture}
+                start_date={item.start_date}
               />
             }
           </SwiperSlide>

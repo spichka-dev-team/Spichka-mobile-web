@@ -13,7 +13,8 @@ const LocationPageServer = async ({ params }: Props) => {
   const { id } = await params;
 
   try {
-    const { data: initialData } = await axios.get(`${apiUrl}/locations/${id}`);
+    const { data } = await axios.get(`${apiUrl}/Community_Group/${id}`);
+    const initialData = data.data;
     return <LocationPage id={id} initialData={initialData} />;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response?.status === 404) {

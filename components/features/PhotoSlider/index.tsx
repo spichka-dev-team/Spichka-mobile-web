@@ -4,14 +4,29 @@ import { PhotoSliderWrapper } from "./ui/PhotoSliderWrapper";
 import React from "react";
 
 interface Props {
-  className?: string;
+  id: string;
 }
 
-export const PhotoSlider: React.FC<Props> = async ({ className }) => {
-  const { data: photos } = await axios.get(
-    `https://671e15491dfc429919813dc2.mockapi.io/reactpizza/items`
-  );
-  console.log(photos);
+const apiUrl = process.env.API_URL;
+const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 
-  return <PhotoSliderWrapper initialData={photos} className={className} />;
+export const PhotoSlider: React.FC<Props> = async ({ id }) => {
+  console.log("PhotoSlider. Id: ", id);
+
+  console.log(
+    "Запрос на бек: ",
+    `${apiUrl}/items/Event/${id}?fields=gallery.directus_files_id`
+  );
+
+  const { data } = await axios.get(
+    `${apiUrl}/items/Event/${id}?fields=gallery.directus_files_id`,
+    {
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+      },
+    }
+  );
+  const photos = data.data.gallery;
+
+  return <PhotoSliderWrapper initialData={photos} />;
 };

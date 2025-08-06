@@ -2,9 +2,10 @@
 
 import { login, LoginState } from "@/app/(auth)/login/actions";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 import { Plus } from "lucide-react";
 import styles from "./styles.module.scss";
@@ -20,21 +21,10 @@ export function LoginForm() {
   const isValid = email.trim() !== "" && password.length >= 9;
 
   useEffect(() => {
-    async function setTokenAndRedirect() {
-      if (state?.cookie?.value) {
-        // Отправим токен на API для установки Set-Cookie
-        await fetch("/api/auth/set-token", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: state.cookie.value }),
-        });
-
-        router.push("/profile");
-      }
+    if (state?.redirectTo) {
+      router.push(state.redirectTo);
     }
-
-    setTokenAndRedirect();
-  }, [router, state]);
+  }, [state?.redirectTo, router]);
 
   return (
     <form
@@ -89,12 +79,6 @@ export function LoginForm() {
 
       {state?.errors?.general && (
         <p className="text-sm text-red-500">{state.errors.general}</p>
-      )}
-
-      {state?.cookie?.value && (
-        <div className="text-green-600 font-bold">
-          Токен получен: {state.cookie?.value}
-        </div>
       )}
 
       <button

@@ -1,0 +1,37 @@
+import { NextRequest, NextResponse } from "next/server";
+import axios from "axios";
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
+
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const path = searchParams.get("path");
+
+  if (!path) {
+    return NextResponse.json(
+      { error: "Missing path parameter" },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const directusRes = await axios.get(`${apiUrl}/${path}`, {
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+      },
+    });
+
+    return NextResponse.json(directusRes.data);
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Directus error:", error.response?.data || error.message);
+    } else {
+      console.error("Unknown error:", error);
+    }
+    return NextResponse.json(
+      { error: "Failed to fetch from Directus" },
+      { status: 500 }
+    );
+  }
+}

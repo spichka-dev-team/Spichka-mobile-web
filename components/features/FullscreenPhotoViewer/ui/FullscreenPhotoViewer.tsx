@@ -11,7 +11,8 @@ import type { Swiper as SwiperType } from "swiper";
 
 interface PhotoSliderItem {
   id: number;
-  imageUrl: string;
+  Event_id: number;
+  directus_files_id: string;
 }
 
 interface Props {
@@ -112,7 +113,6 @@ export const FullscreenPhotoViewer: React.FC<Props> = ({
         <X size={32} />
       </button>
 
-      {/* Полноэкранный слайдер */}
       <div className="w-full h-full flex items-center justify-center">
         <Swiper
           modules={[Navigation]}
@@ -142,7 +142,10 @@ export const FullscreenPhotoViewer: React.FC<Props> = ({
             >
               <div className="relative w-full h-full flex items-center justify-center p-4">
                 <Image
-                  src={photo.imageUrl || "/placeholder.svg"}
+                  src={
+                    `/api/proxy/image?id=${photo.directus_files_id}` ||
+                    "/placeholder.svg"
+                  }
                   alt={`Photo ${photo.id}`}
                   fill
                   className="object-contain"

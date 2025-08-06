@@ -1,12 +1,13 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { EventType, TagType } from "@/components/shared/types/models";
+import { Event } from "@/components/shared/types/models";
 import { EventSlider, PhotoSlider } from "@/components/features";
 
 import {
   ProgramSection,
   LocationSectionServer,
   EventInfo,
+  CreatorSection,
 } from "@/components/widgets";
 
 import { Suspense } from "react";
@@ -15,11 +16,14 @@ import styles from "./styles.module.scss";
 
 interface Props {
   id: string;
-  data?: EventType;
-  tags?: TagType[];
+  data: Event;
 }
 
-export const EventPage: React.FC<Props> = ({ id }) => {
+export const EventPage: React.FC<Props> = ({ id, data }) => {
+  console.log(data);
+  const locationId =
+    data.community_group_location[0].Community_Group_Location_id;
+
   return (
     <main
       className={cn(
@@ -28,16 +32,19 @@ export const EventPage: React.FC<Props> = ({ id }) => {
       )}
     >
       <Suspense fallback={<div>Loading event info...</div>}>
-        <EventInfo id={id} />
+        <EventInfo data={data} />
       </Suspense>
-      <PhotoSlider />
+      <PhotoSlider id={id} />
 
       <section className="w-full">
         <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">
           программка
         </h3>
         <Suspense fallback={<div>Loading program...</div>}>
-          <ProgramSection id={id} />
+          <ProgramSection
+            schedule={data.schedule}
+            duration={data.duration_hours}
+          />
         </Suspense>
       </section>
 
@@ -46,11 +53,25 @@ export const EventPage: React.FC<Props> = ({ id }) => {
           локация
         </h3>
         <Suspense fallback={<div>Loading location...</div>}>
-          <LocationSectionServer id={id} />
+          <LocationSectionServer id={locationId} />
         </Suspense>
       </section>
 
-      <EventSlider request={`events/${id}/same-events`} />
+      <section className="w-full">
+        <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">
+          организатор
+        </h3>
+        <Suspense fallback={<div>Loading location...</div>}>
+          <CreatorSection id={id} />
+        </Suspense>
+      </section>
+
+      <section className="w-full">
+        <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">
+          похожие ивенты
+        </h3>
+        <EventSlider request={`items/Event`} />
+      </section>
     </main>
   );
 };

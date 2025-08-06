@@ -2,6 +2,7 @@
 
 import { SignInFormSchema } from "@/lib/definitions";
 import axios from "axios";
+import { cookies } from "next/headers";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,46 +13,50 @@ export type LoginState = {
     general?: string[];
   };
   redirectTo?: string;
-  cookie?: {
-    name: string;
-    value: string;
-  };
 };
 
 export async function login(
-  state: LoginState | undefined,
+  prevState: LoginState | undefined,
   formData: FormData
 ): Promise<LoginState> {
   const result = SignInFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
+
   if (!result.success) {
     return { errors: result.error.flatten().fieldErrors };
   }
+
   const { email, password } = result.data;
 
   try {
-    const exist = await axios.request({
-      url: `${apiUrl}/users/exist-by-email`,
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      data: { email },
-    });
-    console.log(exist.data);
-
-    const { data } = await axios.post(`${apiUrl}/users/login`, {
+    const response = await axios.post(`${apiUrl}/auth/login`, {
       email,
       password,
     });
 
-    console.log("Login successful:", data.access_token);
+    const { access_token, refresh_token, expires } = response.data.data;
 
+    const cookieStore = await cookies();
+
+    cookieStore.set("spichka_token", access_token, {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      maxAge: expires,
+    });
+
+    cookieStore.set("spichka_refresh", refresh_token, {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // или сколько у тебя
+    });
+
+    // либо return redirect("/homepage")
     return {
-      cookie: {
-        name: "spichka_token",
-        value: data.access_token,
-      },
+      redirectTo: "/homepage",
     };
   } catch (err: unknown) {
     if (axios.isAxiosError(err) && err.response) {
@@ -63,6 +68,11 @@ export async function login(
         return { errors: { general: ["Неверный запрос"] } };
       }
     }
-    return { errors: { general: ["Серверная ошибка, попробуйте позже"] } };
+
+    return {
+      errors: {
+        general: ["Серверная ошибка, попробуйте позже"],
+      },
+    };
   }
 }

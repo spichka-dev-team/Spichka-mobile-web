@@ -54,7 +54,7 @@ export const Avatar: React.FC<AvatarProps> = ({
         )}
       >
         <Image
-          src={photo || smartGuy}
+          src={`/api/proxy/image?id=${photo}` || smartGuy}
           alt={title}
           fill
           className="object-cover"

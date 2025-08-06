@@ -8,19 +8,33 @@ const apiUrl = process.env.API_URL;
 const Page: React.FC = async () => {
   const cookieStore = await cookies();
   const cookie = cookieStore.get("spichka_token");
-  console.log(cookie?.value);
+
+  if (!cookie?.value) {
+    return <div>Ошибка: Токен не найден</div>;
+  }
+
   try {
     const response = await axios.get(`${apiUrl}/users/me`, {
       headers: {
-        Authorization: `Bearer ${cookie?.value}`,
+        Authorization: `Bearer ${cookie.value}`,
       },
     });
 
-    console.log("User data fetched successfully:", response.data);
+    const userData = response.data.data;
+    return <ProfilePage data={userData} />;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      return (
+        <html>
+          <head>
+            <meta httpEquiv="refresh" content="0; URL=/retry-refresh" />
+          </head>
+          <body></body>
+        </html>
+      );
+    }
 
-    return <ProfilePage data={response?.data} />;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
+    return <div>Произошла ошибка</div>;
   }
 };
 

@@ -9,5 +9,11 @@ export async function POST() {
     maxAge: 0,
   });
 
+  response.cookies.set("spichka_refresh", "", {
+    httpOnly: true,
+    path: "/",
+    maxAge: 0,
+  });
+
   return response;
 }

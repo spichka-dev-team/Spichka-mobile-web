@@ -6,7 +6,7 @@ export const metadata = {
   description: "Просмотр событий, организаторов и исполнителей",
 };
 
-export default function PlatformLayout({
+export default async function PlatformLayout({
   children,
 }: {
   children: React.ReactNode;
