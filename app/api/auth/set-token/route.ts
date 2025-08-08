@@ -13,13 +13,13 @@ export async function POST(request: Request) {
   response.cookies.set("spichka_token", access_token, {
     httpOnly: true,
     path: "/",
-    maxAge: expires / 1000, // если приходит в миллисекундах
+    maxAge: 60 * 60 * 24,
   });
 
   response.cookies.set("spichka_refresh", refresh_token, {
     httpOnly: true,
     path: "/",
-    maxAge: 60 * 60 * 24 * 30, // например, 30 дней
+    maxAge: 60 * 60 * 24 * 30,
   });
 
   return response;

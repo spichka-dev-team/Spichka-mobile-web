@@ -4,6 +4,7 @@ import styles from "./styles.module.scss";
 import { EventSlider } from "@/components/features/EventSlider";
 // import { BannerSlider } from "@/components/features/BannerSlider";
 import { Ticket } from "@/components/shared/ui/Ticket";
+import { OnBoarding } from "@/components/features/OnBoarding";
 // import { Button } from "@/components/shared/ui/button";
 // import Link from "next/link";
 
@@ -38,6 +39,8 @@ export const HomePage: React.FC<Props> = ({ className }) => {
 
         <EventSlider request="items/Event" />
       </section>
+
+      <OnBoarding />
     </main>
   );
 };

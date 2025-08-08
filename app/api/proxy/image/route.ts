@@ -7,13 +7,24 @@ const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const assetId = searchParams.get("id");
+  const width = searchParams.get("width");
+  const height = searchParams.get("height");
 
   if (!assetId) {
     return new NextResponse("Missing asset id", { status: 400 });
   }
 
   try {
-    const imageRes = await axios.get(`${apiUrl}/assets/${assetId}`, {
+    const query = new URLSearchParams();
+    if (width) query.append("width", width);
+    if (height) query.append("height", height);
+
+    const directusUrl = `${apiUrl}/assets/${assetId}${
+      query.toString() ? `?${query.toString()}` : ""
+    }`;
+    console.log(directusUrl);
+
+    const imageRes = await axios.get(directusUrl, {
       headers: {
         Authorization: `Bearer ${adminToken}`,
       },

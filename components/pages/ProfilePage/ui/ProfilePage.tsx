@@ -4,7 +4,8 @@ import styles from "./styles.module.scss";
 import Image from "next/image";
 import { ProfilePageType } from "@/components/shared/types/models";
 
-import { Avatar, BoughtTicket } from "@/components/shared/ui";
+import { UserTickets } from "@/components/widgets";
+import { Avatar } from "@/components/shared/ui";
 import { Pen, Settings } from "lucide-react";
 import { Logout } from "@/components/entities";
 import Link from "next/link";
@@ -14,6 +15,8 @@ interface ProfilePageProps {
 }
 
 export const ProfilePage: React.FC<ProfilePageProps> = ({ data }) => {
+  console.log(data);
+
   return (
     <main
       className={cn(
@@ -41,32 +44,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ data }) => {
         subtitle={`@${data.username}`}
       />
 
-      <BoughtTicket
-        title="Общество мертвых поэтов"
-        date="14 марта"
-        time="15:00"
-        address="ул. Барибаева, д.36"
-        posterUrl="/images/smartguy.jpg"
-        posterAlt="Постер фильма Общество мертвых поэтов"
-      />
-
-      <BoughtTicket
-        title="Общество мертвых поэтов"
-        date="14 марта"
-        time="15:00"
-        address="ул. Барибаева, д.36"
-        posterUrl="/images/smartguy.jpg"
-        posterAlt="Постер фильма Общество мертвых поэтов"
-      />
-
-      <BoughtTicket
-        title="Общество мертвых поэтов"
-        date="14 марта"
-        time="15:00"
-        address="ул. Барибаева, д.36"
-        posterUrl="/images/smartguy.jpg"
-        posterAlt="Постер фильма Общество мертвых поэтов"
-      />
+      <UserTickets />
 
       <div className="flex flex-col gap-2 w-full">
         <div className="flex items-center gap-3 w-full rounded-lg bg-white/10 backdrop-blur-sm p-4">

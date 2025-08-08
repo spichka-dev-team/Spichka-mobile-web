@@ -11,7 +11,6 @@ import {
 } from "@/components/widgets";
 
 import { Suspense } from "react";
-
 import styles from "./styles.module.scss";
 
 interface Props {

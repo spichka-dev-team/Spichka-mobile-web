@@ -28,11 +28,15 @@ const tabItems = [
 export const TabBar = () => {
   const pathname = usePathname();
 
+  if (pathname.includes("/profile/update")) {
+    return null; // компонент вообще не рендерится
+  }
+
   return (
     <div
       className={cn(
         styles.TabBar,
-        "fixed max-h-[128px] flex justify-center bottom-0 left-0 right-0 z-50  px-6 py-4"
+        "fixed max-h-[128px] flex justify-center bottom-0 left-0 right-0 z-40  px-6 py-4"
       )}
     >
       <nav className="flex w-full max-w-[250px] items-center justify-center gap-2">

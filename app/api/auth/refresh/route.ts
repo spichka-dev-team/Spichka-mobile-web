@@ -59,7 +59,7 @@ export async function POST() {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 15, // 15 минут
+      maxAge: 60 * 15 * 24, // 15 минут
     });
 
     response.cookies.set("spichka_refresh", newRefreshToken, {

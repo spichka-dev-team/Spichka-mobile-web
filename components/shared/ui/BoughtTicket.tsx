@@ -1,10 +1,11 @@
 import Image from "next/image";
 import { QrCode } from "lucide-react";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 
 interface TicketProps {
   title: string;
   date: string;
-  time: string;
   address: string;
   posterUrl: string;
   posterAlt: string;
@@ -14,12 +15,17 @@ interface TicketProps {
 export function BoughtTicket({
   title,
   date,
-  time,
   address,
   posterUrl,
   posterAlt,
   showQR = true,
 }: TicketProps) {
+  const dateObj = new Date(date);
+
+  const formattedDate = format(dateObj, "d MMMM", { locale: ru });
+
+  const formattedTime = format(dateObj, "HH:mm");
+
   return (
     <div
       className="relative w-full"
@@ -48,7 +54,10 @@ export function BoughtTicket({
           <div className="relative z-10 flex gap-2 h-full">
             <div className="flex-shrink-0">
               <Image
-                src={posterUrl || "/placeholder.svg"}
+                src={
+                  `/api/proxy/image?id=${posterUrl}&width=300&height=500` ||
+                  "/placeholder.svg"
+                }
                 alt={posterAlt}
                 width={56}
                 height={84}
@@ -60,9 +69,9 @@ export function BoughtTicket({
             <div className="flex-1 flex flex-col pt-6 justify-between text-white">
               <div>
                 <div className="text-xs flex items-center gap-[6px] font-medium font-geologica text-[#FFFFFF80] leading-none mb-1">
-                  {date}{" "}
+                  {formattedDate}{" "}
                   <div className="rounded-full bg-[#FFFFFF40] h-[3px] w-[3px]"></div>{" "}
-                  {time}
+                  {formattedTime}
                 </div>
                 <h2 className="text-sm font-bold leading-tight">{title}</h2>
               </div>
