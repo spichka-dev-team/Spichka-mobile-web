@@ -31,7 +31,7 @@ export const EventPage: React.FC<Props> = ({ id, data }) => {
       )}
     >
       <Suspense fallback={<div>Loading event info...</div>}>
-        <EventInfo data={data} />
+        <EventInfo id={id} data={data} />
       </Suspense>
       <PhotoSlider id={id} />
 
@@ -69,7 +69,12 @@ export const EventPage: React.FC<Props> = ({ id, data }) => {
         <h3 className="font-medium font-unbounded text-xl text-white mb-[10px]">
           похожие ивенты
         </h3>
-        <EventSlider request={`items/Event`} />
+        <EventSlider
+          request="items/Event"
+          filters={{
+            "filter[id][_neq]": `${id}`,
+          }}
+        />
       </section>
     </main>
   );

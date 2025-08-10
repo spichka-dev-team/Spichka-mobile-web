@@ -6,7 +6,13 @@ import { EventSliderClient } from "./ui/EventSliderClient";
 import { EventSliderSkeleton } from "./ui/EventSliderSkeleton";
 import { EventCardType } from "@/components/shared/types/models";
 
-export const EventSlider = ({ request }: { request: string }) => {
+export const EventSlider = ({
+  request,
+  filters,
+}: {
+  request: string;
+  filters?: Record<string, string>;
+}) => {
   const [data, setData] = useState<EventCardType[] | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,6 +22,7 @@ export const EventSlider = ({ request }: { request: string }) => {
         const res = await axios.get(`/api/events`, {
           params: {
             path: request,
+            ...filters,
           },
         });
         console.log(res.data);

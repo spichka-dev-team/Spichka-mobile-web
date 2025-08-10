@@ -161,3 +161,18 @@ export type Event = {
   tickets_types: number[];
   gallery: number[];
 };
+
+// -----------------------------------------------------------------------
+// payment
+
+export type PaymentTicketType = {
+  Tickets_Type_id: {
+    id: string;
+    date_created: string;
+    date_updated: string | null;
+    name: string;
+    price: number;
+    user_created: string;
+    user_updated: string | null;
+  };
+};

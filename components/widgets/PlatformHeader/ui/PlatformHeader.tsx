@@ -1,10 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Plus, Share, ChevronLeft } from "lucide-react";
 
 export const PlatformHeader = () => {
   const router = useRouter();
+  const pathname = usePathname();
+
+  if (pathname.endsWith("/payment")) {
+    return null; // не рендерим компонент
+  }
 
   const handleBackClick = () => {
     router.back();

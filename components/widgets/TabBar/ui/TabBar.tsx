@@ -28,6 +28,10 @@ const tabItems = [
 export const TabBar = () => {
   const pathname = usePathname();
 
+  if (pathname.endsWith("/payment")) {
+    return null; // не рендерим компонент
+  }
+
   if (pathname.includes("/profile/update")) {
     return null; // компонент вообще не рендерится
   }

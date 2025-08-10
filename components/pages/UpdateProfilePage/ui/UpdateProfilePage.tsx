@@ -15,6 +15,8 @@ interface UserData {
   username: string;
   avatar?: string;
   isCreator?: boolean;
+  phone_number?: string;
+  verification_status?: string;
 }
 
 interface UpdateProfilePageProps {
@@ -34,6 +36,8 @@ export const UpdateProfilePage: React.FC<UpdateProfilePageProps> = ({
     first_name: data.first_name || "",
     last_name: data.last_name || "",
     username: data.username || "",
+    phone_number: data.phone_number || "",
+    // verification_status: data.verification_status || "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [avatarId, setAvatarId] = useState<string | null>(data.avatar || null);
@@ -113,7 +117,7 @@ export const UpdateProfilePage: React.FC<UpdateProfilePageProps> = ({
   return (
     <>
       {onboarding ? (
-        <OnBoarding />
+        <OnBoarding setFormData={setFormData} setOnboarding={setOnboarding} />
       ) : (
         <div className="min-h-screen pb-20 bg-black text-white">
           <div className="flex items-center px-4 py-4">

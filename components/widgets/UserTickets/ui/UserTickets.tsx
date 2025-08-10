@@ -2,7 +2,6 @@
 
 import React from "react";
 import axios from "axios";
-import { cookies } from "next/headers";
 
 import { cn } from "@/lib/utils";
 import { BoughtTicket } from "@/components/shared/ui";
@@ -10,14 +9,12 @@ import { Event, TicketHistoryItem } from "../types/types";
 
 interface Props {
   className?: string;
+  token: string | undefined;
 }
 
 const apiUrl = process.env.API_URL;
 
-export const UserTickets: React.FC<Props> = async ({ className }) => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("spichka_token")?.value;
-
+export const UserTickets: React.FC<Props> = async ({ className, token }) => {
   let tickets: Event[] = [];
   try {
     const ticketsResponse = await axios.get<{ data: TicketHistoryItem[] }>(

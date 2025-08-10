@@ -15,11 +15,20 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // собираем все параметры, кроме path
+  const params: Record<string, string> = {};
+  searchParams.forEach((value, key) => {
+    if (key !== "path") {
+      params[key] = value;
+    }
+  });
+
   try {
     const directusRes = await axios.get(`${apiUrl}/${path}`, {
       headers: {
         Authorization: `Bearer ${adminToken}`,
       },
+      params,
     });
 
     return NextResponse.json(directusRes.data);

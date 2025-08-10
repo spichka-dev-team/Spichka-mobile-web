@@ -9,7 +9,7 @@ import { Avatar, ExpandableText, TitleLink } from "@/components/shared/ui";
 import { ChipTag } from "@/components/entities/ChipTag";
 import { LocationType } from "@/components/shared/types/models";
 import { EventSlider } from "@/components/features";
-import { PhotoGalleryTemplate } from "@/components/widgets";
+// import { PhotoGalleryTemplate } from "@/components/widgets";
 
 const titles = ["кто они", "история DJ Akee"];
 
@@ -18,7 +18,7 @@ interface Props {
   initialData: LocationType;
 }
 
-export const LocationPage: React.FC<Props> = async ({ id, initialData }) => {
+export const LocationPage: React.FC<Props> = async ({ initialData }) => {
   console.log(initialData);
 
   return (
@@ -85,14 +85,12 @@ export const LocationPage: React.FC<Props> = async ({ id, initialData }) => {
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-normal text-xl">афиша</h3>
-        <EventSlider
-          request={`Event_Community_Group?filter={"Community_Group_id":{"_eq":${id}}}&fields=Event_id.*,%20Community_Group_id`}
-        />
+        <EventSlider request="items/Event" />
       </section>
 
       <section className="flex flex-col gap-2">
         <TitleLink to="gallery" title="Галерея организатора" />
-        <PhotoGalleryTemplate id={id} />
+        {/* <PhotoGalleryTemplate id={id} /> */}
       </section>
     </main>
   );

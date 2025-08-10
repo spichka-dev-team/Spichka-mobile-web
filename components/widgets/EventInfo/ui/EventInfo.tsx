@@ -4,12 +4,14 @@ import Image from "next/image";
 import { ChipTag } from "@/components/entities/ChipTag";
 import { Button, ExpandableText } from "@/components/shared/ui";
 import { Event } from "@/components/shared/types/models";
+import Link from "next/link";
 
 interface Props {
+  id: string;
   data: Event;
 }
 
-export const EventInfo: React.FC<Props> = async ({ data }) => {
+export const EventInfo: React.FC<Props> = async ({ id, data }) => {
   console.log("EventInfo data:", data);
 
   const formattedDate = new Date(data.start_date).toLocaleDateString("ru-RU", {
@@ -37,17 +39,6 @@ export const EventInfo: React.FC<Props> = async ({ data }) => {
         <h3 className="z-20 font-unbounded font-medium text-xl">
           {data.title}
         </h3>
-
-        <h4 className="font-geologica font-normal lowercase text-white/80 flex items-center gap-2 flex-wrap">
-          {/* {hotTags.map((item: TagType, idx: number) => (
-            <React.Fragment key={item.id}>
-              <span>{item.name}</span>
-              {idx < tags.length - 1 && (
-                <div className="w-1 h-1 rounded-full bg-white/80" />
-              )}
-            </React.Fragment>
-          ))} */}
-        </h4>
       </div>
 
       <div className="flex flex-wrap justify-center gap-2 w-full">
@@ -65,9 +56,11 @@ export const EventInfo: React.FC<Props> = async ({ data }) => {
       <ExpandableText text={data.description} />
 
       <div className="max-w-xs w-full h-fit bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-between pr-5">
-        <Button className="bg-white text-black h-full py-4 px-8 rounded-full font-unbounded font-medium text-base">
-          купить билет!
-        </Button>
+        <Link href={`/event/${id}/payment`} className="w-full">
+          <Button className="bg-white text-black h-full py-4 px-8 rounded-full font-unbounded font-medium text-base">
+            купить билет!
+          </Button>
+        </Link>
 
         <span className="font-geologica font-bold text-lg">{data.price}₸</span>
       </div>

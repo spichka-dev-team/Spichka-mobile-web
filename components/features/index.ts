@@ -4,3 +4,4 @@ export { FullscreenPhotoViewer } from "./FullscreenPhotoViewer";
 export { LoginForm } from "./LoginForm";
 export { SignUpForm } from "./SignUpForm";
 export { PhotoSlider } from "./PhotoSlider";
+export { PaymentSection } from "./PaymentSection";

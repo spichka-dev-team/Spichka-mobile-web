@@ -12,11 +12,10 @@ import Link from "next/link";
 
 interface ProfilePageProps {
   data: ProfilePageType;
+  token: string | undefined;
 }
 
-export const ProfilePage: React.FC<ProfilePageProps> = ({ data }) => {
-  console.log(data);
-
+export const ProfilePage: React.FC<ProfilePageProps> = ({ data, token }) => {
   return (
     <main
       className={cn(
@@ -44,20 +43,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ data }) => {
         subtitle={`@${data.username}`}
       />
 
-      <UserTickets />
+      <UserTickets token={token} />
 
       <div className="flex flex-col gap-2 w-full">
-        <div className="flex items-center gap-3 w-full rounded-lg bg-white/10 backdrop-blur-sm p-4">
-          <div className="h-fit w-fit rounded-full bg-white py-[14px] px-3">
-            <Image
-              src="/svg/ticketBlack.svg"
-              width={20}
-              height={16}
-              alt="ticket"
-            />
-          </div>
-          <p className="lowercase font-geologica font-medium ">Билеты</p>
-        </div>
         <div className="flex items-center gap-3 w-full rounded-lg bg-white/10 backdrop-blur-sm p-4">
           <div className="h-fit w-fit rounded-full bg-white py-[14px] px-3">
             <Image

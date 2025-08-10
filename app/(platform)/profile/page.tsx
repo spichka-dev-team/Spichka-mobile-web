@@ -1,36 +1,32 @@
 import React from "react";
 import axios from "axios";
 import { ProfilePage } from "@/components/pages/ProfilePage";
-import { cookies } from "next/headers";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import { Logout } from "@/components/entities";
 
 const apiUrl = process.env.API_URL;
 
 const Page: React.FC = async () => {
-  const cookieStore = await cookies();
-  const cookie = cookieStore.get("spichka_token");
-
-  if (!cookie?.value) {
-    return <div>Ошибка: Токен не найден</div>;
-  }
+  const session = await getServerSession(authOptions);
+  console.log("Сессия: ", session);
+  console.log(Date.now());
 
   try {
     const response = await axios.get(`${apiUrl}/users/me`, {
       headers: {
-        Authorization: `Bearer ${cookie.value}`,
+        Authorization: `Bearer ${session?.accessToken}`,
       },
     });
 
     const userData = response.data.data;
-    return <ProfilePage data={userData} />;
+    return <ProfilePage data={userData} token={session?.accessToken} />;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       return (
-        <html>
-          <head>
-            <meta httpEquiv="refresh" content="0; URL=/retry-refresh" />
-          </head>
-          <body></body>
-        </html>
+        <div>
+          Произошла ошибка <Logout />
+        </div>
       );
     }
 

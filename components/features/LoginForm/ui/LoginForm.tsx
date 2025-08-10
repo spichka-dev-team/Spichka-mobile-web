@@ -1,34 +1,49 @@
 "use client";
 
-import { login, LoginState } from "@/app/(auth)/login/actions";
+import { signIn } from "next-auth/react";
 import { cn } from "@/lib/utils";
-import { useActionState, useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 import { Plus } from "lucide-react";
 import styles from "./styles.module.scss";
 
 export function LoginForm() {
-  const [state, action, pending] = useActionState(login, {} as LoginState);
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
 
   const isValid = email.trim() !== "" && password.length >= 9;
 
-  useEffect(() => {
-    if (state?.redirectTo) {
-      router.push(state.redirectTo);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setPending(true);
+
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+      callbackUrl: "/homepage",
+    });
+
+    setPending(false);
+
+    if (result?.error) {
+      setError("Неверный email или пароль");
+    } else {
+      router.push("/homepage");
     }
-  }, [state?.redirectTo, router]);
+  };
 
   return (
     <form
-      action={action}
+      onSubmit={handleSubmit}
       className="max-w-[320px] w-full px-2 text-white rounded-2xl space-y-4"
     >
       <div>
@@ -44,9 +59,6 @@ export function LoginForm() {
             "mt-1 w-full rounded-full px-3 py-3 focus:outline-none focus:ring bg-white/10 backdrop-blur-sm"
           )}
         />
-        {state?.errors?.email && (
-          <p className="mt-1 text-sm text-red-500">{state.errors.email}</p>
-        )}
       </div>
 
       <div>
@@ -62,9 +74,6 @@ export function LoginForm() {
             "mt-1 w-full rounded-full px-3 py-3 focus:outline-none focus:ring bg-white/10 backdrop-blur-sm"
           )}
         />
-        {state?.errors?.password && (
-          <p className="mt-1 text-sm text-red-500">{state.errors.password}</p>
-        )}
       </div>
 
       <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
@@ -77,9 +86,7 @@ export function LoginForm() {
         Показать пароль
       </label>
 
-      {state?.errors?.general && (
-        <p className="text-sm text-red-500">{state.errors.general}</p>
-      )}
+      {error && <p className="text-sm text-red-500">{error}</p>}
 
       <button
         type="submit"
@@ -100,20 +107,15 @@ export function LoginForm() {
         <div className="w-full h-[1px] bg-white/50"></div>
       </div>
 
-      <button
-        type="submit"
+      <Link
+        href="/signup"
         className={cn(
-          "w-full h-12 bg-white-glass backdrop-blur-sm text-white rounded-full py-2  transition pl-5"
+          "w-full h-12 bg-white-glass backdrop-blur-sm text-white rounded-full py-2 flex items-center justify-center gap-2 font-geologica text-sm"
         )}
       >
-        <Link
-          href="/signup"
-          className="flex items-center gap-2 font-geologica text-sm"
-        >
-          <Plus className="w-5 h-5" />
-          Создайте новый аккаунт
-        </Link>
-      </button>
+        <Plus className="w-5 h-5" />
+        Создайте новый аккаунт
+      </Link>
 
       <p className="font-geologica text-xs text-center text-white/50">
         нажав продолжить, вы соглашаетесь с нашими Условиями предоставления

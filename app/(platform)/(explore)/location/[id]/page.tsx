@@ -8,12 +8,25 @@ interface Props {
 }
 
 const apiUrl = process.env.API_URL;
+const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 
 const LocationPageServer = async ({ params }: Props) => {
   const { id } = await params;
 
   try {
-    const { data } = await axios.get(`${apiUrl}/Community_Group/${id}`);
+    const { data } = await axios.get(
+      `${apiUrl}/items/Community_Group_Location/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      }
+    );
+    console.log(
+      "Запрос на локацию: ",
+      `${apiUrl}/items/Community_Group_Location/${id}`
+    );
+    console.log(data);
     const initialData = data.data;
     return <LocationPage id={id} initialData={initialData} />;
   } catch (error: unknown) {

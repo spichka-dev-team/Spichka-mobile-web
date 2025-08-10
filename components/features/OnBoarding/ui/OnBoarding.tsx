@@ -16,50 +16,46 @@ export type OnboardingSlide = {
   description: string;
   cta: string;
   imageAlt?: string;
-  kind?: SlideKind; // default: "content"
+  kind?: SlideKind;
 };
 
-type OnboardingProps = {
+interface UserData {
+  id: string;
+  first_name: string;
+  last_name: string;
+  username: string;
+  avatar?: string;
+  isCreator?: boolean;
+  phone_number?: string;
+}
+
+type OnboardingProps<FormDataType extends object = UserData> = {
   slides?: OnboardingSlide[];
   onFinish?: () => void;
+  setFormData: React.Dispatch<React.SetStateAction<FormDataType>>;
+  setOnboarding: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
   ref?: React.RefObject<HTMLDivElement | null>;
 };
 
-// RU phone helpers
-function onlyDigits(v: string) {
-  return v.replace(/\D+/g, "");
-}
+// --- Phone helpers ---
+const onlyDigits = (v: string) => v.replace(/\D+/g, "");
 
-function normalizeToRU11(digits: string) {
-  // Normalize to +7XXXXXXXXXX (11 digits total including leading 7)
+const normalizeToRU11 = (digits: string) => {
   let d = onlyDigits(digits);
-
   if (!d) return "";
 
-  // If starts with 8, treat as Russian and convert to 7
   if (d[0] === "8") d = "7" + d.slice(1);
-
-  // If starts with 7, OK; if starts with 9 and length <= 10, assume 7 + number
   if (d[0] !== "7") {
-    if (d[0] === "9") {
-      d = "7" + d;
-    } else {
-      // Fallback: force to 7 + rest (user can keep typing)
-      d = "7" + d.slice(0, 10);
-    }
+    if (d[0] === "9") d = "7" + d;
+    else d = "7" + d.slice(0, 10);
   }
+  return d.slice(0, 11);
+};
 
-  // Trim to max 11 digits total
-  d = d.slice(0, 11);
-  return d;
-}
-
-function formatRU(digits11: string) {
-  // Expect leading "7"
+const formatRU = (digits11: string) => {
   const d = normalizeToRU11(digits11);
-  const rest = d.slice(1); // 10 digits of national number
-
+  const rest = d.slice(1);
   const a = rest.slice(0, 3);
   const b = rest.slice(3, 6);
   const c = rest.slice(6, 8);
@@ -72,13 +68,12 @@ function formatRU(digits11: string) {
   if (c) out += `-${c}`;
   if (e) out += `-${e}`;
   return out;
-}
+};
 
-function isValidRUPhone(digits: string) {
-  const n = normalizeToRU11(digits);
-  return n.length === 11; // +7 and 10 national digits
-}
+const isValidRUPhone = (digits: string) =>
+  normalizeToRU11(digits).length === 11;
 
+// --- Default slides ---
 const defaultSlides: OnboardingSlide[] = [
   {
     image: "/images/onboarding/hand.png",
@@ -103,18 +98,19 @@ const defaultSlides: OnboardingSlide[] = [
     cta: "то что нужно!",
     imageAlt: "Карусель",
   },
-  // New phone slide
   {
     image: "/images/onboarding/phone.png",
     title: "мы свяжемся",
-    description: "введите номер телефона что бы связались с вами позже",
+    description: "введите номер телефона чтобы связались с вами позже",
     cta: "стать креатором",
     imageAlt: "Телефон",
     kind: "phone",
   },
 ];
 
-export function OnBoarding(props: OnboardingProps) {
+export function OnBoarding<FormDataType extends object = UserData>(
+  props: OnboardingProps<FormDataType>
+) {
   const slides = useMemo(
     () =>
       (props.slides?.length ? props.slides : defaultSlides).map((s) => ({
@@ -127,42 +123,25 @@ export function OnBoarding(props: OnboardingProps) {
   const [index, setIndex] = useState(0);
   const current = slides[index];
 
-  // Phone state (only used on the phone slide)
   const [phoneInput, setPhoneInput] = useState("+7 (");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
-  const digitsForValidation = useMemo(
-    () => normalizeToRU11(phoneInput),
-    [phoneInput]
-  );
+
   const canSubmitPhone =
-    isValidRUPhone(digitsForValidation) && !isSubmitting && !sent;
+    current.kind === "phone" && isValidRUPhone(phoneInput) && !isSubmitting;
 
   const next = useCallback(async () => {
-    // If on the phone slide, submit instead of going to next slide
     if (current.kind === "phone") {
       if (!canSubmitPhone) return;
-      try {
-        setIsSubmitting(true);
-        const res = await fetch("/api/phone", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phone: digitsForValidation }),
-        });
-        // Simulate success even if not 200, but check anyway
-        if (!res.ok) {
-          // noop; still mark as sent for demo purposes
-        }
-        setSent(true);
-        // Small delay to show success state
-        await new Promise((r) => setTimeout(r, 400));
-        props.onFinish?.();
-      } catch (e) {
-        // Optional: show error toast; for demo we just stop submitting
-        console.error(e);
-      } finally {
-        setIsSubmitting(false);
-      }
+
+      setIsSubmitting(true);
+      props.setFormData((prev) => ({
+        ...prev,
+        phone_number: normalizeToRU11(phoneInput),
+        // verification_status: "PENDING",
+      }));
+      props.onFinish?.();
+      props.setOnboarding(false);
+      setIsSubmitting(false);
       return;
     }
 
@@ -171,13 +150,12 @@ export function OnBoarding(props: OnboardingProps) {
       props.onFinish?.();
       return i;
     });
-  }, [current.kind, canSubmitPhone, props, slides.length, digitsForValidation]);
+  }, [current.kind, canSubmitPhone, props, slides.length, phoneInput]);
 
   const prev = useCallback(() => {
     setIndex((i) => Math.max(0, i - 1));
   }, []);
 
-  // Keyboard navigation
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "ArrowRight") next();
@@ -190,7 +168,6 @@ export function OnBoarding(props: OnboardingProps) {
     return () => window.removeEventListener("keydown", handler);
   }, [next, prev, current.kind]);
 
-  // Basic touch swipe
   const touchStartX = useRef<number | null>(null);
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -204,11 +181,8 @@ export function OnBoarding(props: OnboardingProps) {
     touchStartX.current = null;
   };
 
-  // Handle phone input with masking
   const handlePhoneChange = (v: string) => {
-    // keep formatting consistent
-    const formatted = formatRU(v);
-    setPhoneInput(formatted);
+    setPhoneInput(formatRU(v));
   };
 
   return (
@@ -227,16 +201,11 @@ export function OnBoarding(props: OnboardingProps) {
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        {/* Content */}
         <div className="relative h-full pt-[10vh] pb-7 flex flex-col justify-between">
-          {/* Top illustration area (fixed height to prevent layout shift) */}
+          {/* Image */}
           <div className="relative w-full h-72 sm:h-80 flex items-center justify-center">
             <Image
-              src={
-                current.image ||
-                "/placeholder.svg?height=280&width=160&query=onboarding%20image" ||
-                "/placeholder.svg"
-              }
+              src={current.image}
               alt={current.imageAlt || "Иллюстрация слайда"}
               fill
               sizes="(max-width: 640px) 100vw, 480px"
@@ -245,7 +214,7 @@ export function OnBoarding(props: OnboardingProps) {
             />
           </div>
 
-          {/* Bottom text and controls */}
+          {/* Text */}
           <div className="relative mt-10 h-52 z-10 space-y-6 px-6 pb-6 text-center">
             <div className="space-y-3">
               <h3 className="text-2xl font-extrabold leading-tight sm:text-3xl">
@@ -272,20 +241,16 @@ export function OnBoarding(props: OnboardingProps) {
                     "h-11 rounded-full bg-white/10 text-white placeholder:text-white/60 border-0",
                     "focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-0"
                   )}
-                  maxLength={18} // "+7 (xxx) xxx-xx-xx"
-                  aria-invalid={!isValidRUPhone(digitsForValidation)}
-                  aria-describedby="phone-help"
+                  maxLength={18}
+                  aria-invalid={!isValidRUPhone(phoneInput)}
                 />
               </div>
             )}
           </div>
 
-          {/* Dots + Controls */}
+          {/* Controls */}
           <div className="space-y-3">
-            <div
-              className="flex items-center justify-center gap-[5px]"
-              aria-label="Индикаторы слайдов"
-            >
+            <div className="flex items-center justify-center gap-[5px]">
               {slides.map((_, i) => (
                 <span
                   key={i}
@@ -304,10 +269,7 @@ export function OnBoarding(props: OnboardingProps) {
                 <Button
                   variant="secondary"
                   onClick={prev}
-                  className={cn(
-                    "h-11 w-11 shrink-0 rounded-full bg-white text-black hover:bg-white/80"
-                  )}
-                  aria-label="Назад"
+                  className="h-11 w-11 shrink-0 rounded-full bg-white text-black hover:bg-white/80"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
@@ -322,17 +284,11 @@ export function OnBoarding(props: OnboardingProps) {
                     : "bg-white hover:bg-white/90"
                 )}
               >
-                {current.kind === "phone" ? (
-                  isSubmitting ? (
-                    <span className="inline-flex items-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      {"отправляем..."}
-                    </span>
-                  ) : sent ? (
-                    current.cta
-                  ) : (
-                    current.cta
-                  )
+                {current.kind === "phone" && isSubmitting ? (
+                  <span className="inline-flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    {"отправляем..."}
+                  </span>
                 ) : (
                   current.cta
                 )}

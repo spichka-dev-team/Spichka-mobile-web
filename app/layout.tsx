@@ -7,6 +7,7 @@ import {
   geologica,
 } from "./ui/fonts";
 import "./globals.css";
+import Providers from "@/components/shared/ui/Providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,7 +24,7 @@ export default function RootLayout({
       <body
         className={`${jost.variable} ${comfortaa.variable} ${libreFranklin.variable} ${unbounded.variable} ${geologica.variable}`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
