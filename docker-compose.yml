@@ -1,0 +1,21 @@
+services:
+  spichka-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spichka-mobile-web
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+    volumes:
+      # Mount env file if it exists
+      - ./.env.local:/app/.env.local:ro
+    networks:
+      - spichka-network
+
+networks:
+  spichka-network:
+    driver: bridge
