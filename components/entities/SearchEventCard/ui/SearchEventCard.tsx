@@ -31,6 +31,7 @@ export type SearchCardProps =
       id: number;
       image: string;
       description: string;
+      name: string;
       link: string;
     };
 
@@ -42,7 +43,11 @@ export const SearchEventCard: React.FC<SearchCardProps> = (props) => {
           {/* Изображение */}
           <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-muted flex-shrink-0">
             <Image
-              src={`/api/proxy/image?id=${props.image}`}
+              src={
+                props.image
+                  ? `/api/proxy/image?id=${props.image}`
+                  : "/images/smartguy.jpg"
+              }
               alt={"title" in props && props.title ? props.title : ""}
               width={80}
               height={80}
@@ -86,6 +91,9 @@ export const SearchEventCard: React.FC<SearchCardProps> = (props) => {
 
             {props.type === "creator" && (
               <>
+                <h3 className="font-unbounded font-medium text-lg text-white truncate">
+                  {props.name}
+                </h3>
                 <p className="font-geologica text-sm text-muted-foreground truncate">
                   {props.description}
                 </p>

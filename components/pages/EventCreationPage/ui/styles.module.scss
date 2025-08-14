@@ -1,0 +1,98 @@
+.EventPage {
+  min-height: 100vh;
+
+  background-image: radial-gradient(
+    ellipse 110vw 45% at 0% 50%,
+    #deb88f 0%,
+    #f16001 40%,
+    #c10801 70%,
+    rgba(#000000, 0) 100%
+  );
+
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: 100% 95%;
+}
+
+.Input {
+  &_h2 {
+    background: transparent;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    resize: none;
+
+    // Убираем shadcn / Tailwind ring при фокусе
+    &:focus {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      --tw-ring-color: transparent;
+      --tw-ring-shadow: 0 0 #0000;
+    }
+
+    text-align: center;
+    font-size: 1.25rem; // ~ text-lg
+    color: #fff;
+    width: 100%;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4); // серый
+      transition: color 0.2s ease;
+    }
+
+    &:focus::placeholder {
+      opacity: 0;
+    }
+  }
+
+  &_h4 {
+    background: transparent;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    resize: none;
+
+    // Убираем shadcn / Tailwind ring при фокусе
+    &:focus {
+      outline: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      --tw-ring-color: transparent;
+      --tw-ring-shadow: 0 0 #0000;
+    }
+
+    text-align: center;
+    font-size: 1rem; // ~ text-lg
+    color: #fff;
+    width: 100%;
+
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.4); // серый
+      transition: color 0.2s ease;
+    }
+
+    &:focus::placeholder {
+      opacity: 0;
+    }
+  }
+
+  &_numeric {
+    background: transparent;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    resize: none;
+
+    text-align: center;
+    color: #000000;
+
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.4); // серый
+      transition: color 0.2s ease;
+    }
+
+    &:focus::placeholder {
+      opacity: 0;
+    }
+  }
+}

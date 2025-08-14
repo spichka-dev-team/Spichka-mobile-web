@@ -1,50 +1,49 @@
 "use client";
 
-import { signup, SignUpState } from "@/app/(auth)/signup/actions";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
-import { startTransition } from "react";
+import { useState } from "react";
 import Link from "next/link";
-
 import styles from "./styles.module.scss";
+import axios from "axios";
 
 export function SignUpForm() {
-  const [state, action, pending] = useActionState(signup, {} as SignUpState);
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const isValid =
     email.trim() !== "" && password.length >= 9 && password === confirmPassword;
 
-  useEffect(() => {
-    async function setTokenAndRedirect() {
-      if (state?.cookie?.value) {
-        await fetch("/api/auth/set-token", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: state.cookie.value }),
-        });
-        router.push("/profile");
-      }
-    }
-    setTokenAndRedirect();
-  }, [router, state]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPending(true);
+    setErrorMessage("");
+    setSuccessMessage("");
 
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/users/register`, {
+        email,
+        password,
+      });
 
-    startTransition(() => {
-      action(formData);
-    });
+      setSuccessMessage(
+        "Проверьте почту — туда отправлена ссылка для подтверждения."
+      );
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setErrorMessage(
+        err.response?.data?.errors?.[0]?.message || "Ошибка регистрации"
+      );
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
@@ -65,8 +64,8 @@ export function SignUpForm() {
             "mt-1 w-full rounded-full px-3 py-3 focus:outline-none focus:ring bg-white/10 backdrop-blur-sm"
           )}
         />
-        {state?.errors?.email && (
-          <p className="mt-1 text-sm text-red-500">{state.errors.email}</p>
+        {errorMessage && (
+          <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
         )}
       </div>
 
@@ -110,11 +109,8 @@ export function SignUpForm() {
         Показать пароль
       </label>
 
-      {state?.errors?.general && (
-        <p className="text-sm text-red-500">{state.errors.general}</p>
-      )}
-      {state?.message && (
-        <p className="text-sm text-green-500">{state.message}</p>
+      {successMessage && (
+        <p className="text-sm text-green-500">{successMessage}</p>
       )}
 
       <button

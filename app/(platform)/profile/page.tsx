@@ -7,7 +7,7 @@ import { Logout } from "@/components/entities";
 
 const apiUrl = process.env.API_URL;
 
-const Page: React.FC = async () => {
+const ProfilePageServer: React.FC = async () => {
   const session = await getServerSession(authOptions);
   console.log("Сессия: ", session);
   console.log(Date.now());
@@ -34,4 +34,4 @@ const Page: React.FC = async () => {
   }
 };
 
-export default Page;
+export default ProfilePageServer;

@@ -42,75 +42,72 @@ export const SearchPage: React.FC<Props> = ({ className }) => {
     setError(null);
 
     try {
-      let resource = "";
-      let filter: object = {};
+      let path = "";
 
       switch (filterType) {
         case "ивенты":
-          resource = "Event";
-          filter = {
-            _or: [{ title: { _icontains: searchTerm.trim() } }],
-          };
+          path = "items/Event";
           break;
         case "локации":
-          resource = "Community_Group";
-          filter = {
-            _or: [{ name: { _icontains: searchTerm.trim() } }],
-          };
+          path = "items/Community_Group_Location";
           break;
         case "креаторы":
-          resource = "Creator";
-          filter = {
-            _or: [{ bio: { _icontains: searchTerm.trim() } }],
-          };
+          path = "users";
           break;
       }
 
-      const url = `/api/proxy/search?path=items/${resource}&filter=${encodeURIComponent(
-        JSON.stringify(filter)
-      )}`;
-      console.log("обращаемся к:" + url);
-      const response = (await axios.get(url)).data;
-
-      const data = await response;
+      const url = `/api/proxy/search?path=${encodeURIComponent(
+        path
+      )}&query=${encodeURIComponent(searchTerm.trim())}&limit=20`;
+      const { data } = await axios.get(url);
       console.log(data);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedResults: SearchCardProps[] = data.data.map((item: any) => {
-        switch (filterType) {
-          case "ивенты":
-            return {
-              type: "event",
-              id: item.id,
-              image: item.picture,
-              title: item.title,
-              date: new Date(item.start_date).toLocaleDateString("ru-RU", {
-                day: "2-digit",
-                month: "long",
-              }),
-              tag: item.tags?.[0] || "",
-              link: `/event/${item.id}`,
-            };
-          case "локации":
-            return {
-              type: "location",
-              id: item.id,
-              image: item.profile_picture,
-              title: item.name,
-              subtitle: item.subtitle || "",
-              address: item.address || "",
-              link: `/location/${item.id}`,
-            };
-          case "креаторы":
-            return {
-              type: "creator",
-              id: item.id,
-              image: item.banner_picture,
-              description: item.bio,
-              link: `/creator/${item.id}`,
-            };
+      const mappedResults: SearchCardProps[] = (data?.data ?? []).map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (item: any) => {
+          switch (filterType) {
+            case "ивенты":
+              return {
+                type: "event",
+                id: item.id,
+                image: item.picture, // как и раньше; если нужен превью — через ваш /api/proxy/image
+                title: item.title,
+                date: item.start_date
+                  ? new Date(item.start_date).toLocaleDateString("ru-RU", {
+                      day: "2-digit",
+                      month: "long",
+                    })
+                  : "",
+                tag: item.tags?.[0] || "",
+                link: `/event/${item.id}`,
+              };
+
+            case "локации":
+              return {
+                type: "location",
+                id: item.id,
+                // разные инсталляции могут хранить поле по-разному — оставим фолбэки
+                image:
+                  item.profile_picture || item.picture || item.image || null,
+                title: item.name,
+                subtitle: item.subtitle || item.description || "",
+                address: item.address || "",
+                link: `/location/${item.id}`,
+              };
+
+            case "креаторы":
+              return {
+                type: "creator",
+                id: item.id,
+                // у users обычно avatar, но часто расширяют баннером
+                image: item.avatar || null,
+                name: item.first_name + " " + item.last_name,
+                description: `@${item.username}` || "",
+                link: `/user/${item.id}`,
+              };
+          }
         }
-      });
+      );
 
       setResults(mappedResults);
     } catch (err) {

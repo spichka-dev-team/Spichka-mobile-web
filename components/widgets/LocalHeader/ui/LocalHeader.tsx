@@ -21,10 +21,8 @@ export const LocalHeader = ({ title }: { title: string }) => {
           <ArrowLeft className="w-6 h-6" />
         </button>
 
-        <h2 className="font-unbounded font-medium text-xl">
-          {title.length > 10
-            ? title.slice(0, 10).toLowerCase() + "..."
-            : title.toLowerCase()}
+        <h2 className="font-unbounded font-medium text-xl text-center">
+          {title.toLowerCase()}
         </h2>
 
         <div className="w-6 h-6"></div>
