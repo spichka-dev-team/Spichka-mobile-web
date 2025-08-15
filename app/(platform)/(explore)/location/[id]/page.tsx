@@ -15,16 +15,12 @@ const LocationPageServer = async ({ params }: Props) => {
 
   try {
     const { data } = await axios.get(
-      `${apiUrl}/items/Community_Group_Location/${id}`,
+      `${apiUrl}/items/Community_Group_Location/${id}?fields=*,gallery.*`,
       {
         headers: {
           Authorization: `Bearer ${adminToken}`,
         },
       }
-    );
-    console.log(
-      "Запрос на локацию: ",
-      `${apiUrl}/items/Community_Group_Location/${id}`
     );
     console.log(data);
     const initialData = data.data;

@@ -13,6 +13,7 @@ export const ExpandableText: React.FC<ExpandableTextProps> = ({
   limit = 200,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  console.log(text?.length);
 
   if (!text) return;
 
@@ -25,7 +26,7 @@ export const ExpandableText: React.FC<ExpandableTextProps> = ({
     );
   }
 
-  const preview = text.slice(0, limit) + "…";
+  const preview = text.slice(0, limit - 30) + "…";
 
   return (
     <div className="z-20 font-geologica font-normal text-base text-center px-4">

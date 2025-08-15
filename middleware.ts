@@ -1,30 +1,29 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
-};
+import { getToken } from "next-auth/jwt";
+import { NextResponse, type NextRequest } from "next/server";
 
 const PRIVATE_PATHS = ["/profile", "/settings", "/dashboard"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const isPrivatePath = PRIVATE_PATHS.some((p) => pathname.startsWith(p));
 
-  const isPrivatePath = PRIVATE_PATHS.some((privatePath) =>
-    pathname.startsWith(privatePath)
-  );
+  if (!isPrivatePath) return NextResponse.next();
 
-  if (!isPrivatePath) {
-    return NextResponse.next();
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+
+  if (token?.error === "RefreshAccessTokenError") {
+    console.log(
+      "🚫 Middleware: Обнаружена ошибка рефреша токена, перенаправляем на логин"
+    );
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  const accessToken =
-    req.cookies.get("next-auth.session-token")?.value ||
-    req.cookies.get("__Secure-next-auth.session-token")?.value;
+  if (token) return NextResponse.next();
 
-  if (accessToken) {
-    return NextResponse.next();
-  }
-
+  console.log("🚫 Middleware: Нет токена, перенаправляем на логин");
   return NextResponse.redirect(new URL("/login", req.url));
 }
+
+export const config = {
+  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
+};

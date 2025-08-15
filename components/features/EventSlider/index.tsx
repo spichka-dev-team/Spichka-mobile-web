@@ -36,10 +36,10 @@ export const EventSlider = ({
     };
 
     fetchEvents();
-  }, [request]);
+  }, [filters, request]);
 
   if (loading) return <EventSliderSkeleton />;
-  if (!data) return null;
+  if (!data) return <div>Ивенты отсутсвуют</div>;
 
   return <EventSliderClient initialData={data} />;
 };

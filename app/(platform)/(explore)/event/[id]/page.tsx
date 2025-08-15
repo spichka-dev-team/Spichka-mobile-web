@@ -17,7 +17,7 @@ const EventPageServer = async ({ params }: Props) => {
     const [{ data: data }] = await Promise.all([
       (
         await axios.get(
-          `${apiUrl}/items/Event/${id}?fields=*,community_group_location.*,community_group.*`,
+          `${apiUrl}/items/Event/${id}?fields=*,community_group_location.*,community_group.*,organizers.*`,
           {
             headers: {
               Authorization: `Bearer ${adminToken}`,

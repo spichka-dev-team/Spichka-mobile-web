@@ -1,14 +1,13 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
-import { Instagram, Share, ChevronRight } from "lucide-react";
-
-import Link from "next/link";
+// import { Instagram, Share, ChevronRight } from "lucide-react";
+import { CreatorType } from "@/components/shared/types/models";
 
 import {
   Avatar,
   ExpandableText,
-  Button,
+  // Button,
   TitleLink,
 } from "@/components/shared/ui";
 import { EventSlider } from "@/components/features";
@@ -16,11 +15,14 @@ import { PhotoGalleryTemplate } from "@/components/widgets";
 
 interface Props {
   id: string;
+  data: CreatorType;
 }
 
-const titles = ["кто они", "история DJ Akee"];
+// const titles = ["кто они", "история DJ Akee"];
 
-export const OrganiserPage: React.FC<Props> = ({ id }) => {
+export const OrganiserPage: React.FC<Props> = ({ id, data }) => {
+  console.log(data, id);
+
   return (
     <main
       className={cn(
@@ -30,9 +32,13 @@ export const OrganiserPage: React.FC<Props> = ({ id }) => {
     >
       <div className="flex flex-col gap-4">
         <div>
-          <Avatar title="Ян топлес" subtitle="@smartguy" />
+          <Avatar
+            title={data.data.first_name + " " + data.data.last_name}
+            photo={data.data.avatar}
+            subtitle={data.data.title || "креатор медиа контента"}
+          />
 
-          <div className="flex w-full justify-around">
+          {/* <div className="flex w-full justify-around">
             <div className="font-geologica text-center">
               <h6 className="text-sm">35.4K</h6>
               <p className="text-white/50 text-xs">подписчиков</p>
@@ -42,12 +48,12 @@ export const OrganiserPage: React.FC<Props> = ({ id }) => {
               <h6 className="text-sm">224</h6>
               <p className="text-white/50 text-xs">постов</p>
             </div>
-          </div>
+          </div> */}
         </div>
 
-        <ExpandableText text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet placerat neque, non viverra quam pellentesque nec." />
+        <ExpandableText text={data.data.description || "описание отсутсвует"} />
 
-        <div className="flex overflow-auto gap-1 justify-around px-4">
+        {/* <div className="flex overflow-auto gap-1 justify-around px-4">
           <Button className="bg-white text-black w-full h-full py-3 px-5 rounded-full font-geologica font-normal text-base">
             подписаться
           </Button>
@@ -56,14 +62,13 @@ export const OrganiserPage: React.FC<Props> = ({ id }) => {
             <Share className="w-5 h-5" />
           </button>
 
-          {/* Кнопка поделиться */}
-          <button className="p-[18px] bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
+              <button className="p-[18px] bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
             <Instagram className="w-5 h-5" />
           </button>
-        </div>
+        </div> */}
       </div>
 
-      <div className="flex flex-col w-full px-4 bg-[rgba(255,255,255,0.15)] rounded-2xl">
+      {/* <div className="flex flex-col w-full px-4 bg-[rgba(255,255,255,0.15)] rounded-2xl">
         {titles.map((title, idx) => (
           <Link
             href={`post/${idx}`}
@@ -77,18 +82,25 @@ export const OrganiserPage: React.FC<Props> = ({ id }) => {
             <ChevronRight className="w-4 h-4" />
           </Link>
         ))}
-      </div>
+      </div> */}
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-normal text-xl">
           ближайшие события
         </h3>
-        <EventSlider request="events/home" />
+        <EventSlider
+          request={`items/Event`}
+          filters={{
+            filter: JSON.stringify({
+              user_created: { _eq: id },
+            }),
+          }}
+        />
       </section>
 
       <section className="flex flex-col gap-2">
         <TitleLink to="gallery" title="Галерея организатора" />
-        <PhotoGalleryTemplate id={id} />
+        <PhotoGalleryTemplate photos={data.data.gallery} />
       </section>
     </main>
   );

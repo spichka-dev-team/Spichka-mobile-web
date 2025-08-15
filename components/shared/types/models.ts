@@ -44,7 +44,7 @@ export type LocationType = {
   name: string;
   subtitle: string;
   description: string;
-  address: string;
+  address_title: string;
   banner_picture: string;
   profile_picture: string;
   type: string;
@@ -55,6 +55,12 @@ export type LocationType = {
 
   date_created: string;
   date_updated: string;
+
+  gallery: {
+    id: number;
+    directus_files_id: string;
+    Community_Group_Location_id: string;
+  }[];
 
   map_location: {
     type: "Point";
@@ -152,7 +158,11 @@ export type Event = {
     Event_id: string;
     Community_Group_Location_id: string;
   }[];
-  organizers: number[]; // could be expanded into array of objects if needed
+  organizers: {
+    id: number;
+    Event_id: string;
+    Organizers_id: string;
+  }[];
   community_group: {
     id: number;
     Event_id: string;
@@ -176,3 +186,36 @@ export type PaymentTicketType = {
     user_updated: string | null;
   };
 };
+
+// ----------------------------------------------------------------------------------
+
+export interface CreatorResponse {
+  data: CreatorType;
+}
+
+export interface CreatorType {
+  data: {
+    first_name: string;
+    last_name: string;
+    username: string;
+    email: string;
+    banner_picture: string | null;
+    links: string | null;
+    verification_status: "UNVERIFIED" | "VERIFIED";
+    phone_number: string;
+    tags: string | null;
+    description: string | null;
+    title: string | null;
+    email_notifications: boolean;
+    status: "active" | "inactive";
+    role: string;
+    id: string;
+    avatar: string | undefined;
+    location: string | null;
+    gallery: {
+      id: number;
+      directus_files_id: string;
+      directus_users_id: string;
+    }[];
+  };
+}

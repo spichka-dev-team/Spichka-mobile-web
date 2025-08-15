@@ -22,6 +22,7 @@ export const EventPage: React.FC<Props> = ({ id, data }) => {
   console.log(data);
   const locationId =
     data.community_group_location[0].Community_Group_Location_id;
+  const organizerId = data.user_created;
 
   return (
     <main
@@ -61,7 +62,7 @@ export const EventPage: React.FC<Props> = ({ id, data }) => {
           организатор
         </h3>
         <Suspense fallback={<div>Loading location...</div>}>
-          <CreatorSection id={id} />
+          <CreatorSection id={organizerId} />
         </Suspense>
       </section>
 

@@ -52,7 +52,7 @@ export const LocationSection = ({ location }: { location?: LocationType }) => {
               {location.description}
             </span>
             <span className="text-xs text-white/80 font-geologica font-medium break-words">
-              {location.address}
+              {location.address_title}
             </span>
           </div>
           <Button className="hidden sm:visible bg-white text-black py-6 px-6 rounded-full font-geologica font-medium text-sm w-fit">

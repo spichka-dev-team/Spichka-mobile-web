@@ -1,0 +1,21 @@
+.locationPage {
+  position: relative;
+}
+
+.bannerSection {
+  position: relative;
+  height: fit-content;
+  min-height: 200px;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: flex-end;
+  padding: 2rem 1rem;
+}
+
+.bannerContent {
+  position: relative;
+  width: 100%;
+  color: white;
+}

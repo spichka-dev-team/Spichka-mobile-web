@@ -34,7 +34,6 @@ export const UserTickets: React.FC<Props> = async ({ className, token }) => {
   } catch (error) {
     console.warn("Ошибка при получении tickets:", error);
   }
-  console.log(tickets);
 
   return (
     <div className={cn(className, "w-full flex flex-col gap-4 items-center")}>

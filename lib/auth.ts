@@ -2,7 +2,7 @@
 import type { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
-import { JWT } from "next-auth/jwt";
+import type { JWT } from "next-auth/jwt";
 
 const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
 
@@ -29,7 +29,13 @@ declare module "next-auth/jwt" {
     accessToken?: string;
     refreshToken?: string;
     accessTokenExpires?: number;
-    user?: { id?: string; email?: string };
+    user?: {
+      id?: string;
+      email?: string;
+      name?: string;
+      avatar?: string;
+      role?: string;
+    };
     error?: string;
   }
 }
@@ -37,23 +43,41 @@ declare module "next-auth/jwt" {
 async function refreshAccessToken(tokenObject: any) {
   try {
     console.log("♻️ Запрос на обновление токена");
-    console.log("Текущий refreshToken:", tokenObject.refreshToken);
+    console.log(
+      "Текущий refreshToken:",
+      tokenObject.refreshToken?.substring(0, 20) + "..."
+    );
 
     const tokenResponse = await axios.post(`${apiUrl}/auth/refresh`, {
       refresh_token: tokenObject.refreshToken,
     });
 
-    console.log("✅ Ответ от /auth/refresh:", tokenResponse.data);
+    console.log("✅ Ответ от /auth/refresh получен");
+    console.log(
+      "Новый access_token:",
+      tokenResponse.data.data.access_token?.substring(0, 20) + "..."
+    );
+    console.log(
+      "Новый refresh_token:",
+      tokenResponse.data.data.refresh_token?.substring(0, 20) + "..."
+    );
 
-    return {
+    const updatedToken = {
       ...tokenObject,
       accessToken: tokenResponse.data.data.access_token,
       accessTokenExpiry: Date.now() + tokenResponse.data.data.expires,
       refreshToken:
         tokenResponse.data.data.refresh_token ?? tokenObject.refreshToken,
+      error: undefined,
     };
-  } catch (error) {
-    console.error("❌ Ошибка при обновлении токена", error);
+
+    console.log("🔄 Токен успешно обновлен");
+    return updatedToken;
+  } catch (error: any) {
+    console.error(
+      "❌ Ошибка при обновлении токена:",
+      error.response?.data || error.message
+    );
     return {
       ...tokenObject,
       error: "RefreshAccessTokenError",
@@ -104,29 +128,55 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {
         token.accessToken = user.accessToken;
-        token.accessTokenExpiry = Date.now() + user.expiresIn!;
+        token.accessTokenExpiry = Date.now() + user.expiresIn;
         token.refreshToken = user.refreshToken;
 
-        console.log("🔑 Логин: accessToken:", token.accessToken);
-        console.log("🔄 Логин: refreshToken:", token.refreshToken);
+        console.log("🔑 Логин: Токены сохранены");
+
+        try {
+          const meResponse = await axios.get(`${apiUrl}/users/me`, {
+            headers: {
+              Authorization: `Bearer ${user.accessToken}`,
+            },
+          });
+
+          token.user = {
+            id: meResponse.data.data.id,
+            email: meResponse.data.data.email,
+            name: meResponse.data.data.name,
+            avatar: meResponse.data.data.avatar,
+            role: meResponse.data.data.role,
+          };
+        } catch (err) {
+          console.error("❌ Ошибка при получении данных /users/me:", err);
+        }
+      }
+
+      if (token.error === "RefreshAccessTokenError") {
+        console.log(
+          "❌ Ошибка рефреша токена, требуется повторная авторизация"
+        );
+        return token;
       }
 
       const shouldRefreshTime = Math.round(
-        (token.accessTokenExpiry as number) - 60 * 1000 - Date.now()
+        (token.accessTokenExpiry as number) - 2 * 60 * 1000 - Date.now()
       );
 
       if (shouldRefreshTime > 0) {
-        console.log("⏩ Токен ещё жив, рефреш не нужен");
         return Promise.resolve(token);
       }
 
-      console.log("⚠️ Токен просрочен или скоро истечёт, делаем рефреш...");
-      token = await refreshAccessToken(token);
+      console.log("⚠️ Токен истекает, выполняем обновление...");
+      const refreshedToken = await refreshAccessToken(token);
 
-      console.log("🔄 После рефреша: refreshToken:", token.refreshToken);
-      console.log("🔄 После рефреша: accessToken:", token.accessToken);
+      if (refreshedToken.error) {
+        console.log("❌ Не удалось обновить токен");
+      } else {
+        console.log("✅ Токен успешно обновлен");
+      }
 
-      return token;
+      return refreshedToken;
     },
 
     async session({ session, token }) {
@@ -135,7 +185,14 @@ export const authOptions: AuthOptions = {
       session.refreshToken = token.refreshToken;
       session.error = token.error;
 
-      return Promise.resolve(session);
+      if (token.user) {
+        session.user = {
+          ...session.user, // email может прийти от next-auth
+          ...token.user, // наши кастомные поля (name, avatar, role)
+        };
+      }
+
+      return session;
     },
   },
 

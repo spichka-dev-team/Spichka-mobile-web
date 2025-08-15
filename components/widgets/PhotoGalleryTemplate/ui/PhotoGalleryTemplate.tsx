@@ -1,47 +1,76 @@
-import axios from "axios";
+import type React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import styles from "./styles.module.scss";
 
 interface PhotoGalleryTemplateProps {
-  id: string;
-  title?: string;
+  photos: {
+    id: number;
+    directus_files_id: string;
+  }[];
 }
 
-type PhotoType = {
-  id: number;
-  community_group_id: number;
-  directus_files_id: string;
-};
+export const PhotoGalleryTemplate: React.FC<PhotoGalleryTemplateProps> = ({
+  photos,
+}) => {
+  const photoCount = Math.min(photos.length, 5);
 
-const apiUrl = process.env.API_URL;
+  // Define styles directly in the component to avoid SCSS import issues
+  const getGridStyles = (count: number, index: number) => {
+    switch (count) {
+      case 1:
+        return "col-span-1 row-span-1";
+      case 2:
+        return "col-span-1 row-span-1";
+      case 3:
+        if (index === 0) return "col-span-2 row-span-1";
+        return "col-span-1 row-span-1";
+      case 4:
+        return "col-span-1 row-span-1";
+      case 5:
+      default:
+        // Original 5-photo layout
+        if (index === 0) return "row-span-4";
+        if (index === 1) return "col-span-2 row-span-2";
+        if (index === 2) return "row-span-2 col-start-4";
+        if (index === 3) return "row-span-2 col-start-2 row-start-3";
+        if (index === 4) return "col-span-2 row-span-2 col-start-3 row-start-3";
+        return "";
+    }
+  };
 
-export const PhotoGalleryTemplate: React.FC<
-  PhotoGalleryTemplateProps
-> = async ({ id }) => {
-  const { data } = await axios.get(
-    `${apiUrl}/Community_Group_files?filter={"Community_Group_id":{"_eq":${id}}}`
-  );
+  const getParentGridClass = (count: number) => {
+    switch (count) {
+      case 1:
+        return "grid-cols-1 grid-rows-1";
+      case 2:
+        return "grid-cols-2 grid-rows-1";
+      case 3:
+        return "grid-cols-2 grid-rows-2";
+      case 4:
+        return "grid-cols-2 grid-rows-2";
+      case 5:
+      default:
+        return "grid-cols-4 grid-rows-4";
+    }
+  };
 
-  const photos = data.data;
-  console.log("photos:", photos);
   return (
     <div
       className={cn(
-        "h-64 p-2 bg-[rgba(255,255,255,0.15)] rounded-2xl",
-        styles.parent
+        "h-64 p-2 bg-[rgba(255,255,255,0.15)] rounded-2xl grid gap-2",
+        getParentGridClass(photoCount)
       )}
     >
-      {photos.map((item: PhotoType, idx: number) => (
+      {photos.slice(0, 5).map((item, idx) => (
         <div
           key={item.id}
           className={cn(
             "relative rounded-2xl overflow-hidden",
-            styles[`div${idx + 1}`]
+            getGridStyles(photoCount, idx)
           )}
         >
           <Image
-            src={`https://d.vencera.tech/assets/${item.directus_files_id}`}
+            src={`/api/proxy/image?id=${item.directus_files_id}`}
             alt={`Photo ${item.id}`}
             fill
             className="object-cover"
