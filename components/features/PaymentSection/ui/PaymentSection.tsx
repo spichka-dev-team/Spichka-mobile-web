@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React from "react";
+import type React from "react";
 import { cn } from "@/lib/utils";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/shared/ui/button";
 import { useSession } from "next-auth/react";
 import { PaymentTicket } from "@/components/entities";
-import { PaymentTicketType } from "@/components/shared/types/models";
+import type { PaymentTicketType } from "@/components/shared/types/models";
 import { Loader2 } from "lucide-react";
+import { useNotificationStore } from "@/store/NotificationStore";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -32,6 +34,9 @@ export const PaymentSection: React.FC<Props> = ({
   const [selected, setSelected] = useState<SelectedMap>({}); // { [Tickets_Type_id.id]: qty }
   const [pending, setPending] = useState(false);
   const { data: session } = useSession();
+  const router = useRouter();
+  const { addNotification } = useNotificationStore();
+
   // Подстройте под вашу форму сессии (session?.accessToken или session?.user?.accessToken)
   const accessToken =
     (session as any)?.accessToken ??
@@ -129,14 +134,38 @@ export const PaymentSection: React.FC<Props> = ({
     if (failed === 0) {
       console.log(`Успешная оплата: Создано ${success} записей.`);
       setSelected({});
+
+      addNotification({
+        type: "success",
+        title: "Билеты успешно куплены!",
+        message: "Ваши билеты доступны в профиле",
+        duration: 5000,
+      });
+
+      // Redirect back to event page after a short delay
+      setTimeout(() => {
+        router.push(`/event/${eventId}`);
+      }, 1500);
     } else if (success === 0) {
       console.error(
         `Оплата не удалась: Все ${failed} запросов завершились ошибкой.`
       );
       console.error("Payment errors:", errors);
+
+      addNotification({
+        type: "error",
+        title: "Ошибка оплаты",
+        message: "Не удалось обработать платеж. Попробуйте еще раз.",
+      });
     } else {
       console.warn(`Частичный успех: Успешно: ${success}, ошибок: ${failed}.`);
       console.warn("Partial payment errors:", errors);
+
+      addNotification({
+        type: "warning",
+        title: "Частичная оплата",
+        message: `Успешно: ${success}, ошибок: ${failed}. Проверьте ваш профиль.`,
+      });
     }
   };
 

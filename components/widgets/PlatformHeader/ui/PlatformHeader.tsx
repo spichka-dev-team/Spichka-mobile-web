@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { Plus, Share, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 export const PlatformHeader = () => {
   const router = useRouter();
@@ -28,15 +28,14 @@ export const PlatformHeader = () => {
 
         {/* Правые кнопки */}
         <div className="flex gap-3">
-          {/* Кнопка добавить */}
-          <button className="p-4 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
+          {/* <button className="p-4 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
             <Plus className="w-5 h-5" />
           </button>
 
-          {/* Кнопка поделиться */}
+       
           <button className="p-4 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/90 transition-colors">
             <Share className="w-5 h-5" />
-          </button>
+          </button> */}
         </div>
       </div>
     </header>

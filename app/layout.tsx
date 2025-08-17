@@ -8,6 +8,7 @@ import {
 } from "./ui/fonts";
 import "./globals.css";
 import Providers from "@/components/shared/ui/Providers";
+import { NotificationProvider } from "@/components/features";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,6 +26,7 @@ export default async function RootLayout({
         className={`${jost.variable} ${comfortaa.variable} ${libreFranklin.variable} ${unbounded.variable} ${geologica.variable}`}
       >
         <Providers>{children}</Providers>
+        <NotificationProvider />
       </body>
     </html>
   );

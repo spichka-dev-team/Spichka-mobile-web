@@ -203,7 +203,7 @@ export interface CreatorType {
     links: string | null;
     verification_status: "UNVERIFIED" | "VERIFIED";
     phone_number: string;
-    tags: string | null;
+    tags: string[] | null;
     description: string | null;
     title: string | null;
     email_notifications: boolean;

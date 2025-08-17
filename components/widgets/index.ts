@@ -8,3 +8,5 @@ export { CreatorSection } from "./CreatorSection";
 export { UserTickets } from "./UserTickets";
 export { LocalHeader } from "./LocalHeader";
 export { EventCreationForm } from "./EventCreationForm";
+export { ArticleRenderer } from "./ArticleRenderer";
+export { AuthorHeader } from "./AuthorHeader";
