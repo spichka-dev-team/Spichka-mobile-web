@@ -87,7 +87,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/spichka/Spichka-mobile-web
+            cd /root/spichka/Spichka-mobile-web
             git pull origin main
             ./deploy.sh
 
