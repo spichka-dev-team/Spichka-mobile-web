@@ -58,6 +58,17 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: DNS & SSH reachability check
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y dnsutils netcat-openbsd
+          echo "DNS:"
+          dig +short "${{ secrets.HOST }}" || true
+          echo "Ping:"
+          ping -c 3 "${{ secrets.HOST }}" || true
+          echo "SSH port:"
+          nc -vz "${{ secrets.HOST }}" 22 || true
+
       - name: Test SSH Connection
         uses: appleboy/ssh-action@master
         with:
