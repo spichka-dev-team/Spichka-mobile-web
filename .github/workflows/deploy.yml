@@ -16,7 +16,7 @@ jobs:
         with:
           to: -1002824319072
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message_thread_id: 36
+          message_thread_id: 11299
           format: markdown
           message: |
             🔄 *Пайплайн Deploy Frontend to Production запущен*
