@@ -42,3 +42,6 @@ next-env.d.ts
 
 # docker
 .dockerignore
+
+# CI/CD
+.github/secrets
