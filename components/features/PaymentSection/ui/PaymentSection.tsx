@@ -11,7 +11,7 @@ import { PaymentTicket } from "@/components/entities";
 import { PaymentTicketType } from "@/components/shared/types/models";
 import { Loader2 } from "lucide-react";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 interface Props {
   className?: string;

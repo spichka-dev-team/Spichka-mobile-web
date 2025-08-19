@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-const apiUrl = process.env.API_URL;
-const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
+import { apiUrl } from "@/lib/apiUrl";
+const adminToken = process.env.NEXT_DIRECTUS_ANONYMOUS_USER_TOKEN;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

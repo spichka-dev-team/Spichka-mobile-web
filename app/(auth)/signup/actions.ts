@@ -3,7 +3,7 @@
 import { SignUpFormSchema } from "@/lib/definitions";
 import axios from "axios";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 type SignUpErrors = {
   email?: string[];
