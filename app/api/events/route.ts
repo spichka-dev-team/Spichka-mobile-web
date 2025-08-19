@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 
 export async function GET(req: NextRequest) {

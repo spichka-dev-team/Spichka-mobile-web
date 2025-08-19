@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 import type { JWT } from "next-auth/jwt";
 
-const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 declare module "next-auth" {
   interface Session {
@@ -96,7 +96,8 @@ export const authOptions: AuthOptions = {
       async authorize(
         credentials: Record<"email" | "password", string> | undefined
       ) {
-        console.log(credentials);
+        console.log("✅ User logined successfully");
+        //console.log(credentials);
         if (!credentials) return null;
         try {
           const user = await axios.post(`${apiUrl}/auth/login`, {

@@ -7,7 +7,14 @@ import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 import { useSession } from "next-auth/react";
 
-const CREATOR_ROLE_ID = "37a0bb0e-ca4c-4234-966e-c5fe212e9c60";
+// for Staging
+//const CREATOR_ROLE_ID = "37a0bb0e-ca4c-4234-966e-c5fe212e9c60";
+
+// for Dev
+const CREATOR_ROLE_ID = "f498e0f7-0e02-4d6e-9acd-1e4a4b615f64";
+//const CREATOR_ROLE_ID = process.env.DIRECTUS_CREATOR_ROLE_ID;
+
+console.log(CREATOR_ROLE_ID)
 
 declare module "next-auth" {
   interface User {

@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { Logout } from "@/components/entities";
 
-const apiUrl = process.env.API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 const ProfilePageServer: React.FC = async () => {
   const session = await getServerSession(authOptions);

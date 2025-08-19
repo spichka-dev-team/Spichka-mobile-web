@@ -6,7 +6,7 @@ interface Props {
   id: string;
 }
 
-const apiUrl = process.env.API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 
 export const LocationSectionServer: React.FC<Props> = async ({ id }) => {

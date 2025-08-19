@@ -12,7 +12,7 @@ interface Props {
   token: string | undefined;
 }
 
-const apiUrl = process.env.API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 export const UserTickets: React.FC<Props> = async ({ className, token }) => {
   let tickets: Event[] = [];

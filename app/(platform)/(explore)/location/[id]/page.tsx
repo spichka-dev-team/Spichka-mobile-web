@@ -7,7 +7,7 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-const apiUrl = process.env.API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
 
 const LocationPageServer = async ({ params }: Props) => {

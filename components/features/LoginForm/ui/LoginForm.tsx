@@ -18,7 +18,7 @@ export function LoginForm() {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
-  const isValid = email.trim() !== "" && password.length >= 9;
+  const isValid = email.trim() !== "" && password.length >= 1;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
