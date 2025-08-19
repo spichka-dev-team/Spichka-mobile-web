@@ -28,6 +28,8 @@ const iconColorMap = {
 export function NotificationProvider() {
   const { notifications, removeNotification } = useNotificationStore();
 
+  if (notifications.length === 0) return null;
+
   return (
     <div className="fixed inset-0 z-50 h-fit flex justify-center p-4">
       {notifications.map((notification) => {

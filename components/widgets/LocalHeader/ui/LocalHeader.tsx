@@ -16,7 +16,7 @@ export const LocalHeader = ({ title }: { title: string }) => {
         {/* Кнопка назад */}
         <button
           onClick={handleBackClick}
-          className="  text-white hover:bg-black/90 transition-colors"
+          className=" text-white hover:bg-black/90 transition-colors"
         >
           <ArrowLeft className="w-6 h-6" />
         </button>
