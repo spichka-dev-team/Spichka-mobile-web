@@ -52,10 +52,10 @@ jobs:
       - name: Run linter
         run: npm run lint
 
-      - name: Build application
-        run: npm run build
-        env:
-          NODE_ENV: production
+      # - name: Build application
+      #   run: npm run build
+      #   env:
+      #     NODE_ENV: production
 
       - name: DNS & SSH reachability check
         run: |
