@@ -5,7 +5,7 @@ import Image from "next/image";
 import { CreatorResponse } from "@/components/shared/types/models";
 
 import { apiUrl } from "@/lib/apiUrl";
-const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
+const adminToken = process.env.NEXT_DIRECTUS_ANONYMOUS_USER_TOKEN;
 
 interface CreatorSectionProps {
   id: string;

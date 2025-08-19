@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const API_URL = process.env.API_URL!;
-const ADMIN_TOKEN = process.env.NEXT_DIRECTUS_ADMIN_TOKEN!;
+const ADMIN_TOKEN = process.env.NEXT_DIRECTUS_ANONYMOUS_USER_TOKEN!;
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);

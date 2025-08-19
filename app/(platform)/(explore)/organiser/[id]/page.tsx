@@ -9,7 +9,7 @@ interface Props {
 }
 
 import { apiUrl } from "@/lib/apiUrl";
-const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
+const adminToken = process.env.NEXT_DIRECTUS_ANONYMOUS_USER_TOKEN;
 
 const OrganiserPageServer = async ({ params }: Props) => {
   const { id } = await params;
