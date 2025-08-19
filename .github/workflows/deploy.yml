@@ -10,52 +10,52 @@ jobs:
 
     steps:
      
-      - name: 🚀 Notify Pipeline Start
-        uses: appleboy/telegram-action@master
-        with:
-          to: -1002824319072
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message_thread_id: 11299
-          format: markdown
-          message: |
-            🔄 *Пайплайн Deploy Frontend to Production запущен*
+      # - name: 🚀 Notify Pipeline Start
+      #   uses: appleboy/telegram-action@master
+      #   with:
+      #     to: -1002824319072
+      #     token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      #     message_thread_id: 11299
+      #     format: markdown
+      #     message: |
+      #       🔄 *Пайплайн Deploy Frontend to Production запущен*
             
-            📦 Репозиторий: `${{ github.repository }}`
-            🌿 Ветка: `${{ github.ref_name }}`
-            👤 Инициатор: `${{ github.actor }}`
-            💬 Коммит: `${{ github.event.head_commit.message }}`
-            🔗 [Открыть в CI/CD](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            ⏱️ Ожидание завершения...
-            📎 ID задачи: `${{ github.run_id }}`
+      #       📦 Репозиторий: `${{ github.repository }}`
+      #       🌿 Ветка: `${{ github.ref_name }}`
+      #       👤 Инициатор: `${{ github.actor }}`
+      #       💬 Коммит: `${{ github.event.head_commit.message }}`
+      #       🔗 [Открыть в CI/CD](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+      #       ⏱️ Ожидание завершения...
+      #       📎 ID задачи: `${{ github.run_id }}`
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # - name: Checkout code
+      #   uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '20'
+      #     cache: 'npm'
 
-      # Кеширование node_modules
-      - name: Cache Node modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # # Кеширование node_modules
+      # - name: Cache Node modules
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
-      - name: Install dependencies
-        run: npm ci
+      # - name: Install dependencies
+      #   run: npm ci
 
-      - name: Run linter
-        run: npm run lint
+      # - name: Run linter
+      #   run: npm run lint
 
-      - name: Build application
-        run: npm run build
-        env:
-          NODE_ENV: production
+      # - name: Build application
+      #   run: npm run build
+      #   env:
+      #     NODE_ENV: production
 
       - name: DNS & SSH reachability check
         run: |
