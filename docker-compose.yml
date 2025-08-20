@@ -5,16 +5,16 @@ networks:
 services:
   frontend:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
+    restart: unless-stopped
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - ./frontend/.env
     environment:
       - NODE_ENV=development
       - NEXT_TELEMETRY_DISABLED=1
-    restart: unless-stopped
     networks:
       - spichka-network

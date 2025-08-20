@@ -1,4 +1,4 @@
-#!/bin/bash
+с#!/bin/bash
 
 # Spichka Mobile Web Deployment Script
 # This script pulls the latest changes, builds and runs the application
