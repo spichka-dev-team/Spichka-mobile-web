@@ -71,7 +71,7 @@ fi
 
 # Step 2: Stop existing containers
 print_status "Stopping existing containers..."
-$DOCKER_COMPOSE_CMD down || print_warning "No containers were running"
+$DOCKER_COMPOSE_CMD down --remove-orphans || print_warning "No containers were running"
 
 # Step 2.5: Remove old docker networks (if any remain)
 print_status "Cleaning up old Docker networks..."
