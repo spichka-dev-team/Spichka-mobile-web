@@ -8,13 +8,14 @@ import { ChipTag } from "@/components/entities/ChipTag";
 import { LocationType } from "@/components/shared/types/models";
 import { EventSlider } from "@/components/features";
 import { PhotoGalleryTemplate } from "@/components/widgets";
+import Link from "next/link";
 
 interface Props {
   id: string;
   initialData: LocationType;
 }
 
-export const LocationPage: React.FC<Props> = async ({ initialData }) => {
+export const LocationPage: React.FC<Props> = async ({ id, initialData }) => {
   console.log(initialData);
 
   const gradientColor = "hsl(var(--background))";
@@ -68,7 +69,9 @@ export const LocationPage: React.FC<Props> = async ({ initialData }) => {
 
         <section className="flex flex-col gap-2">
           <TitleLink to="gallery" title="Галерея организатора" />
-          <PhotoGalleryTemplate photos={initialData.gallery} />
+          <Link href={`/location/${id}/gallery`}>
+            <PhotoGalleryTemplate photos={initialData.gallery} />
+          </Link>
         </section>
       </div>
     </main>

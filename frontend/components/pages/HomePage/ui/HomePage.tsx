@@ -2,8 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 import { EventSlider } from "@/components/features/EventSlider";
-// import { BannerSlider } from "@/components/features/BannerSlider";
-import { Ticket } from "@/components/shared/ui/Ticket";
+import { BannerSlider } from "@/components/features/BannerSlider";
 // import { Button } from "@/components/shared/ui/button";
 // import Link from "next/link";
 
@@ -20,12 +19,11 @@ export const HomePage: React.FC<Props> = ({ className }) => {
         "flex flex-col gap-4 pt-10 pb-24 px-2"
       )}
     >
-      <div className="flex px-4 justify-between">
+      <div className="flex px-4 justify-start">
         <h2 className="font-comfortaa font-medium text-2xl">главная</h2>
-        <Ticket />
       </div>
 
-      {/* <BannerSlider /> */}
+      <BannerSlider />
 
       <section className="flex flex-col gap-4">
         <h3 className="font-unbounded font-medium text-xl">название раздела</h3>

@@ -15,3 +15,4 @@ export {
   AddLocation,
 } from "./EventCreation";
 export { TicketTypesForm } from "./TicketTypesForm";
+export { NotificationProvider } from "./NotificationProvider";

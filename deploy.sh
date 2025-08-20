@@ -71,7 +71,11 @@ fi
 
 # Step 2: Stop existing containers
 print_status "Stopping existing containers..."
-$DOCKER_COMPOSE_CMD down || print_warning "No containers were running"
+$DOCKER_COMPOSE_CMD down --remove-orphans || print_warning "No containers were running"
+
+# Step 2.5: Remove old docker networks (if any remain)
+print_status "Cleaning up old Docker networks..."
+docker network prune -f || print_warning "Could not clean up networks"
 
 # Step 3: Remove old images to free up space (optional, comment out if you want to keep them)
 print_status "Cleaning up old Docker images..."
@@ -92,11 +96,19 @@ $DOCKER_COMPOSE_CMD ps
 
 # Step 6: Show logs (last 20 lines)
 print_status "Showing recent logs..."
-$DOCKER_COMPOSE_CMD logs --tail=20 spichka-app
+# Do not fail the deployment if logs retrieval fails
+if SERVICES=$($DOCKER_COMPOSE_CMD ps --services 2>/dev/null); then
+    for svc in $SERVICES; do
+        print_status "Logs for service: $svc"
+        $DOCKER_COMPOSE_CMD logs --tail=20 "$svc" || print_warning "No logs available for $svc"
+    done
+else
+    print_warning "Could not list compose services to show logs"
+fi
 
 print_success "Deployment completed! 🎉"
 print_status "Application is running on http://localhost:3000"
-print_status "To view logs: $DOCKER_COMPOSE_CMD logs -f spichka-app"
+print_status "To view logs: $DOCKER_COMPOSE_CMD logs -f"
 print_status "To stop: $DOCKER_COMPOSE_CMD down"
 
 # Health check
