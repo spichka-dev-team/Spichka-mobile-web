@@ -13,7 +13,7 @@ import type { PaymentTicketType } from "@/components/shared/types/models";
 import { Loader2 } from "lucide-react";
 import { useNotificationStore } from "@/store/NotificationStore";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 interface Props {
   className?: string;

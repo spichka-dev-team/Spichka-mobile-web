@@ -47,8 +47,10 @@ export const ProfilePageClient: React.FC = () => {
       } catch (error: unknown) {
         if (axios.isAxiosError(error) && error.response?.status === 401) {
           setError("Ошибка авторизации");
+          Logout();
         } else {
           setError("Произошла ошибка");
+          Logout();
         }
       } finally {
         setLoading(false);

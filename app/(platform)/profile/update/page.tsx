@@ -4,7 +4,7 @@ import { UpdateProfilePage } from "@/components/pages/UpdateProfilePage";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
-const apiUrl = process.env.API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 const Page: React.FC = async () => {
   const session = await getServerSession(authOptions);

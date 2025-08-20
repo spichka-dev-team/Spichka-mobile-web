@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import { cn } from "@/lib/utils";
+import { apiUrl } from "@/lib/apiUrl";
 import { BoughtTicket } from "@/components/shared/ui";
 import { Event, TicketHistoryItem } from "../types/types";
 
@@ -11,8 +12,6 @@ interface Props {
   className?: string;
   token: string | undefined;
 }
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const UserTickets: React.FC<Props> = ({ className, token }) => {
   const [tickets, setTickets] = useState<Event[]>([]);

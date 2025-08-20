@@ -24,7 +24,7 @@ interface UpdateProfilePageProps {
   token: string;
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 export const UpdateProfilePage: React.FC<UpdateProfilePageProps> = ({
   data,

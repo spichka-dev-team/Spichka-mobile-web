@@ -14,7 +14,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 interface Props {
   images?: BannerType[];

@@ -5,9 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
-import { useSession } from "next-auth/react";
 
-const CREATOR_ROLE_ID = "37a0bb0e-ca4c-4234-966e-c5fe212e9c60";
+const CREATOR_ROLE_ID = process.env.NEXT_PUBLIC_DIRECTUS_CREATOR_ROLE_ID;
 
 declare module "next-auth" {
   interface User {
@@ -18,9 +17,8 @@ declare module "next-auth" {
   }
 }
 
-export const TabBar = () => {
+export const TabBar = ({ role }: { role?: string }) => {
   const pathname = usePathname();
-  const { data: session } = useSession();
 
   const tabItems = [
     { icon: Home, href: "/homepage", label: "Главная" },
@@ -33,7 +31,7 @@ export const TabBar = () => {
     { icon: User, href: "/profile", label: "Профиль" },
   ];
 
-  if (session?.user?.role === CREATOR_ROLE_ID) {
+  if (role === CREATOR_ROLE_ID) {
     tabItems.splice(3, 0, {
       icon: Plus,
       href: "/profile/creator/event_creation",

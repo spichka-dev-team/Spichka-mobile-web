@@ -5,7 +5,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import { apiUrl } from "@/lib/apiUrl";
 
 interface CreatorData {
   id: string; // Added id field for organizer selection

@@ -56,13 +56,17 @@ fi
 
 print_status "Using $DOCKER_COMPOSE_CMD"
 
-# Step 1: Pull latest changes from git
-print_status "Pulling latest changes from git..."
-if git pull origin main; then
-    print_success "Successfully pulled latest changes"
+# Step 1: Pull latest changes from git (skip if running in CI/CD)
+if [ -z "$CI" ]; then
+    print_status "Pulling latest changes from git..."
+    if git pull origin main; then
+        print_success "Successfully pulled latest changes"
+    else
+        print_error "Failed to pull changes from git"
+        exit 1
+    fi
 else
-    print_error "Failed to pull changes from git"
-    exit 1
+    print_status "Running in CI/CD environment, skipping git pull"
 fi
 
 # Step 2: Stop existing containers
@@ -94,3 +98,12 @@ print_success "Deployment completed! 🎉"
 print_status "Application is running on http://localhost:3000"
 print_status "To view logs: $DOCKER_COMPOSE_CMD logs -f spichka-app"
 print_status "To stop: $DOCKER_COMPOSE_CMD down"
+
+# Health check
+print_status "Performing health check..."
+sleep 10
+if curl -f http://localhost:3000 > /dev/null 2>&1; then
+    print_success "Health check passed - application is responding"
+else
+    print_warning "Health check failed - application may still be starting up"
+fi
