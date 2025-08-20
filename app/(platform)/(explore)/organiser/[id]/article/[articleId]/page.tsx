@@ -7,7 +7,7 @@ import { CreatorResponse } from "@/components/shared/types/models";
 import { AuthorHeader } from "@/components/widgets/AuthorHeader";
 
 const apiUrl = process.env.API_URL;
-const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
+const adminToken = process.env.NEXT_DIRECTUS_ANONYMOUS_USER_TOKEN;
 
 type Block =
   | { type: "heading"; level: 1 | 2 | 3 | 4 | 5 | 6; text: string }

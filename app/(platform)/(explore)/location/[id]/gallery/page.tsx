@@ -8,7 +8,7 @@ interface Props {
 }
 
 const apiUrl = process.env.API_URL;
-const adminToken = process.env.NEXT_DIRECTUS_ADMIN_TOKEN;
+const adminToken = process.env.NEXT_DIRECTUS_ANONYMOUS_USER_TOKEN;
 
 export default async function GalleryPageServer({ params }: Props) {
   const { id } = await params;
