@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,8 +14,6 @@ import { BannerType } from "@/components/shared/types/models";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-
-import { apiUrl } from "@/lib/apiUrl";
 
 interface Props {
   images?: BannerType[];
@@ -33,23 +32,33 @@ export const BannerSliderClient: React.FC<Props> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
+    const fetchBanners = async () => {
       try {
-        console.log("Fetching banners from:", `${apiUrl}/Banner`);
-        const response = await axios.get(`${apiUrl}/items/Banner`);
-        console.log(response.data);
+        console.log("Fetching banners from proxy:", `/api/proxy/promote`);
+        const response = await axios.get(`/api/proxy/promote`);
         setData(response.data.data);
       } catch (error) {
-        console.error("Ошибка при получении событий:", error);
+        console.error("Ошибка при получении баннеров:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEvents();
+    fetchBanners();
   }, []);
 
-  if (loading) return <div className="p-4">Loading...</div>;
+  if (loading) {
+    return (
+      <div
+        className="relative w-full animate-pulse rounded-2xl overflow-hidden bg-white-glass backdrop-blur-sm"
+        style={{ aspectRatio: "21/9" }}
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Loader2 className="w-10 h-10 animate-spin text-white" />
+        </div>
+      </div>
+    );
+  }
   if (!data) return null;
 
   return (
@@ -79,23 +88,33 @@ export const BannerSliderClient: React.FC<Props> = ({
           }
           className="w-full h-full rounded-lg overflow-hidden"
         >
-          {data.map((banner: BannerType) => (
-            <SwiperSlide key={banner.id}>
-              <div className="relative w-full h-full">
-                <Link href={`event/${banner.id}`}>
-                  <Image
-                    src={
-                      `https://d.vencera.tech/assets/${banner.picture}` ||
-                      "/placeholder.svg"
-                    }
-                    fill
-                    alt={banner.status || "Баннер"}
-                    className="w-full h-full object-cover"
-                  />
-                </Link>
-              </div>
-            </SwiperSlide>
-          ))}
+          {data.map((banner) => {
+            const linkHref =
+              banner.event?.length > 0
+                ? `/event/${banner.event[0].Event_id}`
+                : banner.article?.length > 0
+                ? `/article/${banner.article[0].Article_id}`
+                : "#";
+
+            return (
+              <SwiperSlide key={banner.id}>
+                <div className="relative w-full h-full">
+                  <Link href={linkHref}>
+                    <Image
+                      src={
+                        banner.picture
+                          ? `/api/proxy/image?id=${banner.picture}`
+                          : "/placeholder.svg"
+                      }
+                      fill
+                      alt={banner.status || "Баннер"}
+                      className="w-full h-full object-cover"
+                    />
+                  </Link>
+                </div>
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
 
         {/* Навигация */}
