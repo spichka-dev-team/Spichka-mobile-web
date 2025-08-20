@@ -6,6 +6,22 @@ const PRIVATE_PATHS = ["/profile", "/settings", "/dashboard"];
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
+  const userAgent = req.headers.get("user-agent") || "";
+  const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      userAgent
+    );
+
+  // Если это не мобильное устройство и не страница для десктопа
+  if (!isMobile && !pathname.startsWith("/desktop-blocked")) {
+    return NextResponse.redirect(new URL("/desktop-blocked", req.url));
+  }
+
+  // Если мобильное устройство пытается зайти на страницу блокировки
+  if (isMobile && pathname.startsWith("/desktop-blocked")) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
   // Получаем токен
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
