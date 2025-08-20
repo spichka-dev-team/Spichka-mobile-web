@@ -31,12 +31,19 @@ export interface EventType {
 }
 
 export type BannerType = {
-  id: number;
+  id: string;
   status: "pending" | "published" | "archived";
-  end_date: string;
-  priority: "main" | "secondary" | "low";
   picture: string;
-  created_date: string;
+  event: {
+    id: number;
+    Promote_id: string;
+    Event_id: string;
+  }[];
+  article: {
+    id: number;
+    Promote_id: string;
+    Article_id: string;
+  }[];
 };
 
 export type LocationType = {

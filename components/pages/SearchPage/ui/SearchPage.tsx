@@ -43,6 +43,7 @@ export const SearchPage: React.FC<Props> = ({ className }) => {
 
     try {
       let path = "";
+      const extraParams: Record<string, string> = {};
 
       switch (filterType) {
         case "ивенты":
@@ -53,13 +54,20 @@ export const SearchPage: React.FC<Props> = ({ className }) => {
           break;
         case "креаторы":
           path = "users";
+          extraParams["filter[role][_eq]"] =
+            "37a0bb0e-ca4c-4234-966e-c5fe212e9c60";
           break;
       }
 
-      const url = `/api/proxy/search?path=${encodeURIComponent(
-        path
-      )}&query=${encodeURIComponent(searchTerm.trim())}&limit=20`;
-      const { data } = await axios.get(url);
+      const { data } = await axios.get("/api/proxy/search", {
+        params: {
+          path,
+          query: searchTerm.trim(),
+          limit: 20,
+          ...extraParams, // фильтр добавится только для "креаторы"
+        },
+      });
+
       console.log(data);
 
       const mappedResults: SearchCardProps[] = (data?.data ?? []).map(
@@ -70,7 +78,7 @@ export const SearchPage: React.FC<Props> = ({ className }) => {
               return {
                 type: "event",
                 id: item.id,
-                image: item.picture, // как и раньше; если нужен превью — через ваш /api/proxy/image
+                image: item.picture,
                 title: item.title,
                 date: item.start_date
                   ? new Date(item.start_date).toLocaleDateString("ru-RU", {
@@ -81,12 +89,10 @@ export const SearchPage: React.FC<Props> = ({ className }) => {
                 tag: item.tags?.[0] || "",
                 link: `/event/${item.id}`,
               };
-
             case "локации":
               return {
                 type: "location",
                 id: item.id,
-                // разные инсталляции могут хранить поле по-разному — оставим фолбэки
                 image:
                   item.profile_picture || item.picture || item.image || null,
                 title: item.name,
@@ -94,16 +100,14 @@ export const SearchPage: React.FC<Props> = ({ className }) => {
                 address: item.address || "",
                 link: `/location/${item.id}`,
               };
-
             case "креаторы":
               return {
                 type: "creator",
                 id: item.id,
-                // у users обычно avatar, но часто расширяют баннером
                 image: item.avatar || null,
                 name: item.first_name + " " + item.last_name,
                 description: `@${item.username}` || "",
-                link: `/user/${item.id}`,
+                link: `/organiser/${item.id}`,
               };
           }
         }
