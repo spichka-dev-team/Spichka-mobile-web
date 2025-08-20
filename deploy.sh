@@ -73,6 +73,10 @@ fi
 print_status "Stopping existing containers..."
 $DOCKER_COMPOSE_CMD down || print_warning "No containers were running"
 
+# Step 2.5: Remove old docker networks (if any remain)
+print_status "Cleaning up old Docker networks..."
+docker network prune -f || print_warning "Could not clean up networks"
+
 # Step 3: Remove old images to free up space (optional, comment out if you want to keep them)
 print_status "Cleaning up old Docker images..."
 docker image prune -f || print_warning "Could not clean up images"
