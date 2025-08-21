@@ -1,4 +1,4 @@
-#!/bin/bash
+с#!/bin/bash
 
 # Spichka Mobile Web Deployment Script
 # This script pulls the latest changes, builds and runs the application
@@ -96,11 +96,19 @@ $DOCKER_COMPOSE_CMD ps
 
 # Step 6: Show logs (last 20 lines)
 print_status "Showing recent logs..."
-$DOCKER_COMPOSE_CMD logs --tail=20 spichka-app
+# Do not fail the deployment if logs retrieval fails
+if SERVICES=$($DOCKER_COMPOSE_CMD ps --services 2>/dev/null); then
+    for svc in $SERVICES; do
+        print_status "Logs for service: $svc"
+        $DOCKER_COMPOSE_CMD logs --tail=20 "$svc" || print_warning "No logs available for $svc"
+    done
+else
+    print_warning "Could not list compose services to show logs"
+fi
 
 print_success "Deployment completed! 🎉"
 print_status "Application is running on http://localhost:3000"
-print_status "To view logs: $DOCKER_COMPOSE_CMD logs -f spichka-app"
+print_status "To view logs: $DOCKER_COMPOSE_CMD logs -f"
 print_status "To stop: $DOCKER_COMPOSE_CMD down"
 
 # Health check
