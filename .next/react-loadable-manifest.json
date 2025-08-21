@@ -1,0 +1,16 @@
+{
+  "components/features/PhotoSlider/ui/PhotoSliderWrapper.tsx -> ./PhotoSlider": {
+    "id": 4467,
+    "files": []
+  },
+  "components/widgets/LocationSection/ui/LocationSection.tsx -> @/components/features/OpenMap": {
+    "id": 3045,
+    "files": [
+      "static/css/55693049b062c6a3.css",
+      "static/chunks/8cc6faea.6eca9ef67d7abf22.js",
+      "static/chunks/d648eb28.3dd8860b1949d49b.js",
+      "static/chunks/d0deef33.aff3d46b768f00e5.js",
+      "static/chunks/3045.b51148035a253349.js"
+    ]
+  }
+}
