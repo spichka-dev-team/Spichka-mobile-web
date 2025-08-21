@@ -2,7 +2,7 @@ networks:
   spichka-network:
     #driver: bridge
     external: true
-    # if external then: docker network create spichka-network
+    #if external then: docker network create spichka-network
 
 #volumes:
 #  # Optional Test: nginx, comment me
@@ -20,8 +20,10 @@ services:
     # In production we recommend running an external systemd nginx for TLS termination
     # so the frontend does not need an external port mapped. If you want to expose
     # the container directly (not recommended), uncomment the following ports mapping.
+    #ports:
+    #  - "3000:3000"
     ports:
-       - "3000:3000"
+      - "127.0.0.1:3000:3000"
     env_file:
       - ./frontend/.env
     environment:
