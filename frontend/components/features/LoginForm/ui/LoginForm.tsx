@@ -4,14 +4,11 @@ import { signIn } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 import { Plus } from "lucide-react";
 import styles from "./styles.module.scss";
 
 export function LoginForm() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +23,7 @@ export function LoginForm() {
     setPending(true);
 
     const result = await signIn("credentials", {
-      redirect: false,
+      redirect: true,
       email,
       password,
       callbackUrl: "/homepage",
@@ -36,8 +33,6 @@ export function LoginForm() {
 
     if (result?.error) {
       setError("Неверный email или пароль");
-    } else {
-      router.push("/homepage");
     }
   };
 

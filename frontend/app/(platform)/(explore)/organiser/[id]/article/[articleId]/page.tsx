@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import React from "react";
 import { ArticleRenderer } from "@/components/widgets/ArticleRenderer";
@@ -27,45 +28,46 @@ interface ArticlePageProps {
   }>;
 }
 
-// моковые данные
-async function getArticle(articleId: string): Promise<{
-  blocks: Block[];
-  title: string;
-  description: string;
-}> {
-  const mockBlocks: Block[] = [
-    {
-      type: "heading",
-      level: 1,
-      text: "The Future of Web Development",
+// конвертируем json от Directus в blocks для ArticleRenderer
+function parseJsonToBlocks(json: any): Block[] {
+  if (!json?.content) return [];
+
+  return json.content
+    .map((block: any): Block | null => {
+      if (block.type === "paragraph") {
+        const text = block.content?.map((t: any) => t.text).join("") ?? "";
+        return text ? { type: "paragraph", text } : null;
+      }
+      if (block.type === "image") {
+        console.log("Image block:", block);
+        return {
+          type: "image",
+          url: block.attrs?.src,
+          alt: block.attrs?.alt ?? "",
+          width: block.attrs?.width ?? undefined,
+          height: block.attrs?.height ?? undefined,
+        };
+      }
+      if (block.type === "heading") {
+        const text = block.content?.map((t: any) => t.text).join("") ?? "";
+        return { type: "heading", level: block.attrs?.level ?? 2, text };
+      }
+      return null;
+    })
+    .filter(Boolean) as Block[];
+}
+
+async function getArticle(articleId: string) {
+  const { data } = await axios.get(`${apiUrl}/items/Article/${articleId}`, {
+    headers: {
+      Authorization: `Bearer ${adminToken}`,
     },
-    {
-      type: "paragraph",
-      text: "Web development continues to evolve at a rapid pace...",
-    },
-    {
-      type: "heading",
-      level: 2,
-      text: "Modern JavaScript Frameworks",
-    },
-    {
-      type: "paragraph",
-      text: "React, Vue, and Angular continue to dominate...",
-    },
-    {
-      type: "image",
-      url: "/placeholder.svg?height=400&width=800",
-      alt: "Modern web development workspace showing code on multiple monitors",
-      width: 800,
-      height: 400,
-    },
-  ];
+  });
 
   return {
-    blocks: mockBlocks,
-    title: `Article ${articleId} - The Future of Web Development`,
-    description:
-      "Exploring current trends and future directions in web development...",
+    blocks: parseJsonToBlocks(data.data.json),
+    title: data.data.title,
+    description: data.data.content?.slice(0, 150) ?? "",
   };
 }
 
@@ -84,9 +86,9 @@ export async function generateMetadata(
 // сама страница
 export default async function ArticlePage(props: ArticlePageProps) {
   const { id, articleId } = await props.params;
-  const { blocks } = await getArticle(articleId);
 
   try {
+    // сначала автор
     const { data }: CreatorResponse = await axios.get(
       `${apiUrl}/users/${id}?fields=*,gallery.*`,
       {
@@ -95,7 +97,9 @@ export default async function ArticlePage(props: ArticlePageProps) {
         },
       }
     );
-    console.log(data.data);
+
+    // потом сама статья
+    const { blocks } = await getArticle(articleId);
 
     return (
       <main className="min-h-screen container mx-auto px-4 py-20 max-w-3xl">
