@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import styles from "./styles.module.scss";
 import { EventSlider } from "@/components/features/EventSlider";
 import { BannerSlider } from "@/components/features/BannerSlider";
+import { ArticleSlider } from "@/components/features/ArticleSlider/ArticleSlider";
 // import { Button } from "@/components/shared/ui/button";
 // import Link from "next/link";
 
@@ -26,13 +27,21 @@ export const HomePage: React.FC<Props> = ({ className }) => {
       <BannerSlider />
 
       <section className="flex flex-col gap-4">
-        <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
+        <h3 className="font-unbounded font-medium text-xl">
+          Ближайшие события
+        </h3>
 
         <EventSlider request="items/Event" />
       </section>
 
       <section className="flex flex-col gap-4">
-        <h3 className="font-unbounded font-medium text-xl">название раздела</h3>
+        <h3 className="font-unbounded font-medium text-xl">статьи</h3>
+
+        <ArticleSlider />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h3 className="font-unbounded font-medium text-xl">Самые популярные</h3>
 
         <EventSlider request="items/Event" />
       </section>
